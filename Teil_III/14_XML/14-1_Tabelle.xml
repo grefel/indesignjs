@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/" 
+	aid:table="table" aid:trows="4" aid:tcols="4" aid5:tablestyle="Tabellenformat">
+<!--	<thead>
+			<tr>-->	
+				<td aid:table="cell" aid:theader="" aid:ccolwidth="25">Kopf1</td>
+				<td aid:table="cell" aid:theader="" aid:ccolwidth="30">Kopf2</td>
+				<td aid:table="cell" aid:theader="" aid:ccolwidth="30">Kopf3</td>
+				<td aid:table="cell" aid:theader="" aid:ccolwidth="30">Kopf4</td>
+<!--		</tr>
+	</thead>
+	<tbody>
+		<tr>
+-->			<td aid:table="cell" aid5:cellstyle="Zellenformat">Body11</td>
+			<td aid:table="cell" aid:crows="2">Body12</td>
+			<td aid:table="cell" aid:ccols="2">Body13</td>
+			<!--	Hier muss eine Zelle wegen der Übersapnnung ausgelassen werden -->
+<!--		</tr>
+		<tr>			
+-->			<td aid:table="cell" aid5:cellstyle="Zellenformat">Body21</td>
+			<!--	Hier muss eine Zelle wegen der Übersapnnung ausgelassen werden -->
+			<td aid:table="cell">Body23</td>
+			<td aid:table="cell">Body14</td>
+<!--		<tr>
+	</tbody>
+	<tfoot>
+	<tr> -->	
+			<td aid:table="cell" aid:tfooter="">Fuß1</td>
+			<td aid:table="cell" aid:tfooter="">Fuß2</td>
+			<td aid:table="cell" aid:tfooter="">Fuß3</td>
+			<td aid:table="cell" aid:tfooter="">Fuß4</td>
+	<!--		<tr>
+		</tfoot>	
+-->
+</table> 

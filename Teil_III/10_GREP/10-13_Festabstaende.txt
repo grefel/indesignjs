@@ -1,0 +1,62 @@
+﻿// Diese Suchen/Ersetzen-Aufgaben steuern das Skript [FindChangeByList.jsx]
+//
+// Speichern Sie die Datei mit dem Namen [FindChangeList.txt] im Ordner [FindChangeSupport] relativ zum Skript.
+// Alternativ können Sie auch den Ordner [FindChangeSupport] umbenennen. Dann fragt das Skript nach der Datei die ausgewertet werden soll.
+// 
+// Mit InDesign CS3 wurde ein fehlerhaftes FindChangeByList.jsx Skript ausgeliefert. Laden Sie eine korrigierte Version unter
+// http://wwwimages.adobe.com/www.adobe.com/products/indesign/scripting/downloads/indesign_cs3_sample_scripts.zip herunter.
+//
+// Einige Standardanfragen – Siehe Unterkapitel 4.8.1
+grep	{findWhat:"  +"}	{changeTo:" "}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Mehrere Leerzeichen zu einem konsolidieren
+grep	{findWhat:"^ "}	{changeTo:""}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen am Anfang eines Absatzes löschen
+grep	{findWhat:" $"}	{changeTo:""}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen am Anfang eines Absatzes löschen
+grep	{findWhat:" +\\."}	{changeTo:"."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Punkt löschen
+grep	{findWhat:" +;"}	{changeTo:";"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Semikolon löschen
+grep	{findWhat:" +,"}	{changeTo:","}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Komma löschen
+grep	{findWhat:"\\( +"}	{changeTo:"("}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen nach einer Klammer löschen
+grep	{findWhat:" +\\)"}	{changeTo:")"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen nach einer Klammer löschen
+ // Die Anfragen aus Kapitel 10-13
+//Ab CS4 können Sie [~m~>~f~|~S~s~<~/~.~3~4~% ] durch \p{Zs} ersetzten. Dadurch wird die Datei deutlich übersichtlicher
+grep	{findWhat:"[~m~>~f~|~S~s~<~/~.~3~4~% ]+(-|--|–)[~m~>~f~|~S~s~<~/~.~3~4~% ]+"}	{changeTo:"~S– "}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Gedankenstrich 
+grep	{findWhat:"[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\.\\.\\.|…)"}	{changeTo:"~%…"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Auslassungszeichen
+// Ergänzen Sie bei Bedarf weitere Abkürzugen ... 
+grep	{findWhat:"a\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*M\\."}	{changeTo:"a.~<M."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen a.M.
+grep	{findWhat:"d\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*h\\."}	{changeTo:"d.~<h."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen d.h.
+grep	{findWhat:"d\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*i\\."}	{changeTo:"d.~<i."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen d.i.
+grep	{findWhat:"d\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*J\\."}	{changeTo:"d.~<J."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen d.J.
+grep	{findWhat:"i\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*E\\."}	{changeTo:"i.~<E."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen i.E.
+grep	{findWhat:"i\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*e\\."}	{changeTo:"i.~<e."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen i.e.
+grep	{findWhat:"m\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*E\\."}	{changeTo:"m.~<E."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen m.E.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*A\\."}	{changeTo:"o.~<A."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.A.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\."}	{changeTo:"o.~<a."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.a.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*ä\\."}	{changeTo:"o.~<ä."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.ä.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*g\\."}	{changeTo:"o.~<g."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.g.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*J\\."}	{changeTo:"o.~<J."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.J.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*k\\."}	{changeTo:"o.~<k."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.k.
+grep	{findWhat:"o\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*O\\."}	{changeTo:"o.~<O."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen o.O.
+grep	{findWhat:"s\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*o\\."}	{changeTo:"s.~<o."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen s.o.
+grep	{findWhat:"s\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*u\\."}	{changeTo:"s.~<u."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen s.u.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\."}	{changeTo:"u.~<a."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.a.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*ä\\."}	{changeTo:"u.~<ä."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.ä.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*ö\\."}	{changeTo:"u.~<ö."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.ö.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*U\\."}	{changeTo:"u.~<U."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.U.
+grep	{findWhat:"v\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\."}	{changeTo:"v.~<a."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen v.a.
+grep	{findWhat:"z\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*B\\."}	{changeTo:"z.~<B."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen z.B.
+grep	{findWhat:"z\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*T\\."}	{changeTo:"z.~<T."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen z.T.
+grep	{findWhat:"z\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*Z\\."}	{changeTo:"z.~<Z."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen z.Z.
+grep	{findWhat:"h\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*c\\."}	{changeTo:"h.~<c."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen h.c.
+grep	{findWhat:"i\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*d\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*R\\."}	{changeTo:"i.~<d.~<R."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen i.d.R.
+grep	{findWhat:"a\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*O\\."}	{changeTo:"a.~<a.~<O."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen a.a.O.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*m\\."}	{changeTo:"u.~<a.~<m."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.a.m.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*v\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\."}	{changeTo:"u.~<v.~<a."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.v.a.
+grep	{findWhat:"u\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*v\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*a\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*m\\."}	{changeTo:"u.~<v.~<a.~<m."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Bekannte Abkürzungen u.v.a.m.
+// Ergänzen Sie bei Bedarf weitere Verweisarten ... 
+grep	{findWhat:"S\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\d)"}	{changeTo:"S.~%$1"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Verweise im Text
+grep	{findWhat:"(\\d)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(m|cm|mm|µm|t|kg|g|mg|l|ml|µl|%)(\\s|[[:punct:]])"}	{changeTo:"$1~%$2$3"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Maßangaben, Prozentzeichen
+grep	{findWhat:"(?<=\\d)[~m~>~f~|~S~s~<~/~.~3~4~% ]?[˚°][~m~>~f~|~S~s~<~/~.~3~4~% ]?([CF])\\b"}	{changeTo:"~S°$1"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Gradangaben
+grep	{findWhat:"§[~m~>~f~|~S~s~<~/~.~3~4~% ]*([\\dIVXLCDM]+)"}	{changeTo:"§~%$1"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}		Paragrafenzeichen
+grep	{findWhat:"(Dr\\.|Drs\\.|Prof\\.)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\u)"}	{changeTo:"$1~%$2"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Akademische Titel 
+grep	{findWhat:"Prof\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*Dr\\.[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\u)"}	{changeTo:"Prof.~%Dr.~%$1"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Akademische Titel Prof. Dr.
+// grep	{findWhat:"(\\d+)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(EUR|Euro|Pfund|Dollar|Yen|€|₤|\\$)"}	{changeTo:"$1~4$2"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Währungszeichen 
+// grep	{findWhat:"(\\d{1,2}\\.)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\d{1,2}\\.)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(\\d{2}|\\d{4})"}	{changeTo:"$1~<$2~<$3"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Datumsangabe: Ziffern
+// grep	{findWhat:"(\\d+\\.)[~m~>~f~|~S~s~<~/~.~3~4~% ]*(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)"}	{changeTo:"$1~%$2"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Datumsangabe Monat ausgeschrieben

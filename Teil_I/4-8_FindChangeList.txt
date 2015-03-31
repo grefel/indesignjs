@@ -1,0 +1,18 @@
+// Diese Suchen/Ersetzen-Aufgaben steuern das Skript [FindChangeByList.jsx]
+//
+// Speichern Sie die Datei mit dem Namen [FindChangeList.txt] im Ordner [FindChangeSupport] relativ zum Skript.
+// Alternativ können Sie auch den Ordner [FindChangeSupport] umbenennen. Dann fragt das Skript nach der Datei, die ausgewertet werden soll.
+//
+// Mit InDesign CS3 wurde ein fehlerhaftes FindChangeByList.jsx Skript ausgeliefert. Laden Sie eine korrigierte Version unter
+// http://wwwimages.adobe.com/www.adobe.com/products/indesign/scripting/downloads/indesign_cs3_sample_scripts.zip herunter.
+//
+// Einige Standardanfragen ... 
+grep	{findWhat:"  +"}	{changeTo:" "}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Mehrere Leerzeichen zu einem konsolidieren
+grep	{findWhat:"^ "}	{changeTo:""}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen am Anfang eines Absatzes löschen
+grep	{findWhat:" $"}	{changeTo:""}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen am Ende eines Absatzes löschen
+grep	{findWhat:" - "}	{changeTo:"~S~= "}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Gedankenstrich einfügen
+grep	{findWhat:" +\\."}	{changeTo:"."}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Punkt löschen
+grep	{findWhat:" +;"}	{changeTo:";"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Semikolon löschen
+grep	{findWhat:" +,"}	{changeTo:","}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen vor einem Komma löschen
+grep	{findWhat:"\\( +"}	{changeTo:"("}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen nach einer Klammer löschen
+grep	{findWhat:" +\\)"}	{changeTo:")"}	{includeFootnotes:true, includeMasterPages:true, includeHiddenLayers:true}	Leerzeichen nach einer Klammer löschen
