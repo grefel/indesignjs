@@ -1,0 +1,10 @@
+﻿var _auswahl = app.selection[0];
+_auswahl.strokeWeight = 4;
+_auswahl.strokeType = "Striche";
+_auswahl.strokeColor = "Grün";
+_auswahl.fillColor = "Grau";
+var _alleAbsaetze = _auswahl.paragraphs.everyItem();
+_alleAbsaetze.appliedParagraphStyle = "infokasten_text";
+var _ersterAbsatz = _auswahl.paragraphs.firstItem();
+_ersterAbsatz.appliedParagraphStyle = "infokasten_u1";
+_auswahl.fit (FitOptions.FRAME_TO_CONTENT);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><kochbuch><rezept art="hauptgericht" id="i1"><titel>Pizzateig</titel>
+<?xml version="1.0" encoding="utf-8"?><kochbuch><rezept art="hauptgericht" id="i1"><titel>Pizzateig</titel><weblink url="http://www.indesignjs.de"/>
 <u-zwischen>Zutaten</u-zwischen>
 <zutaten><zutat><menge>400 g</menge>	<name>Weizenmehl</name></zutat>
 <zutat><menge>200 ml</menge>	<name>Wasser</name></zutat>
@@ -10,7 +10,7 @@
 <schritt>Nach und nach das Wasser zugeben, das <kursiv>Salz</kursiv> einarbeiten und zu einem geschmeidigen Teig verkneten.</schritt>
 <schritt>An einem warmen Ort für 1 Stunde gehen lassen.</schritt>
 <schritt>Den Teig belegen und bei mindestens <fett>250 °C</fett> ca. <fett>15 Minuten</fett> backen.</schritt>
-</beschreibung><bild-container><bild href="file://bilder/pizzateig.jpg"/><legende>Lassen Sie den gekneteten Teig mindestens 1 Stunde gehen.</legende></bild-container></rezept><rezept art="hauptgericht" id="i2"><titel>Tomatensugo</titel>
+</beschreibung><bild-container><bild href="file://bilder/pizzateig.jpg"/><legende>Lassen Sie den gekneteten Teig mindestens 1 Stunde gehen.</legende></bild-container></rezept><rezept art="hauptgericht" id="i2"><titel>Tomatensugo</titel><weblink url="http://www.indesignjs.de"/>
 <u-zwischen>Zutaten</u-zwischen>
 <zutaten><zutat><menge>1 Zehe</menge>	<name>Knoblauch</name></zutat>
 <zutat><menge>1 Knolle</menge>	<name>Zwiebel</name></zutat>
@@ -23,7 +23,8 @@
 <schritt>Nach Belieben <kursiv>Basilikum</kursiv>, <kursiv>Oregano</kursiv> und <kursiv>Rosmarin</kursiv> zugeben.</schritt>
 <schritt>Mit <kursiv>Salz</kursiv> und <kursiv>Pfeffer</kursiv> nach Geschmack abschmecken.</schritt>
 <schritt>Sugo mindestens <fett>15 Minuten</fett> einkochen lassen.</schritt>
-</beschreibung><bild-container><bild href="file://bilder/tomatensugo.jpg"/><legende>Nach Zugabe der Kräuter gut einkochen lassen.</legende></bild-container></rezept><rezept art="dessert" id="i3"><titel>Fatimas Versuchung</titel>
+</beschreibung><bild-container><bild href="file://bilder/tomatensugo.jpg"/><legende>Nach Zugabe der Kräuter gut einkochen lassen.</legende></bild-container></rezept><rezept art="dessert" id="i3"><titel>Fatimas 
+Versuchung</titel><weblink url="http://www.indesignjs.de"/>
 <u-zwischen>Zutaten</u-zwischen>
 <zutaten><zutat><menge>Einen</menge>	<name>Granatapfel</name></zutat>
 <zutat><menge>500 g</menge>	<name>türkischen Joghurt</name></zutat>

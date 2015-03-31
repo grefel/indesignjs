@@ -1,5 +1,4 @@
-#target InDesign
-app.loadFindChangeQuery ("finde_Abbildung", SearchModes.GREP_SEARCH);
+﻿app.loadFindChangeQuery ("finde_Abbildung", SearchModes.GREP_SEARCH);
 var _ergebnisse = app.activeDocument.findGrep (true);	
 for (var i = 0; i < _ergebnisse.length; i++) {
 	var _ergebnis = _ergebnisse[i];

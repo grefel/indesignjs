@@ -1,11 +1,5 @@
-#target InDesign
-if (app.documents.length > 0) {
-	if (app.scriptPreferences.version >= 6 ) { // Ab CS4 Undo bereitstellen
-		app.doScript(verankerteObjekteTauschen, ScriptLanguage.JAVASCRIPT , [], UndoModes.ENTIRE_SCRIPT, "Marginalien tauschen"); 		
-	} 
-	else {
-		verankerteObjekteTauschen();
-	}
+﻿if (app.documents.length > 0) {
+	app.doScript(verankerteObjekteTauschen, ScriptLanguage.JAVASCRIPT , [], UndoModes.ENTIRE_SCRIPT, "Marginalien tauschen"); 		
 } else {
 		alert ("Es ist kein Dokument geöffnet!");
 }

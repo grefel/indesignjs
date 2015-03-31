@@ -1,7 +1,8 @@
-#target InDesign
-app.scriptPreferences.enableRedraw = false; 
+﻿app.scriptPreferences.enableRedraw = false; 
 app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
 app.scriptPreferences.version = 5;
+
+// app.scriptPreferences.measurementUnit = MeasurementUnits.MILLIMETERS;
 
 // Das eigentliche Skript 
 

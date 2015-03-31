@@ -1,5 +1,4 @@
-#target InDesign
-var _dok = app.activeDocument;
+﻿var _dok = app.activeDocument;
 $.writeln("Der Name des Dokuments ist: " + _dok.name);
 _dok.pages.add();
 _dok.pages.add();

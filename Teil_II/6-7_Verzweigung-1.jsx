@@ -1,8 +1,7 @@
-#target InDesign
-if (app.documents.length > 0) {
-	var _dok = app.activeDocument;
+﻿if (app.selection.length > 0) {
+	var _selection = app.selection[0];
 	//...
-	alert ("Es ist mindestens ein Dokument geöffnet!");
+	alert ("Es ist etwas ausfewählt!");
 } else {
-	alert ("Kein Dokument geöffnet");
+	alert ("Es ist nichts ausgewählt!");
 }

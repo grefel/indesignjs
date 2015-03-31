@@ -1,5 +1,4 @@
-#target InDesign
-var _dok = app.activeDocument;
+﻿var _dok = app.activeDocument;
 var _alleBilder = _dok.allGraphics;
 for (var i = 0; i < _alleBilder.length; i++) {
 	var _bild = _alleBilder[i];
@@ -23,7 +22,6 @@ for (var i = 0; i < _alleBilder.length; i++) {
 		_fehler = true;
 	}
 	if (_fehler) {
-		app.activeWindow.activePage = _bildRahmen.parent; // Nur CS3
 		app.select(_bildRahmen);
 		app.activeWindow.zoom(ZoomOptions.FIT_PAGE);
 		alert (_bild.itemLink.name + "\n" + _fehlerMeldung);

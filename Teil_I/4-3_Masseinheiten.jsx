@@ -1,5 +1,4 @@
-#target InDesign
-app.activeDocument.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.MILLIMETERS;
+﻿app.activeDocument.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.MILLIMETERS;
 app.activeDocument.viewPreferences.verticalMeasurementUnits = MeasurementUnits.MILLIMETERS;
 var _auswahl = app.selection[0];
 var _objektFormat = app.activeDocument.objectStyles.itemByName("infokasten");

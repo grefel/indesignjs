@@ -1,5 +1,4 @@
-﻿#target InDesign
-var _tf = app.activeDocument.pages[0].textFrames.add()
+﻿var _tf = app.activeDocument.pages[0].textFrames.add()
 _tf.geometricBounds = [10,10,100,200];
 _textAbschnitt = _tf.parentStory;
 _textAbschnitt.contents = "Vorsicht bei Textänderungen.";

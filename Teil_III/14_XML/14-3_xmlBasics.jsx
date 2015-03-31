@@ -1,1 +1,144 @@
-#target InDesignif (app.documents.length > 0) {	var _dok = app.activeDocument;	var _rulerOrigin = _dok.viewPreferences.rulerOrigin;	_dok.viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;	var _zeroPoint = _dok.zeroPoint;	_dok.zeroPoint = [0,0];	if (app.scriptPreferences.version >= 6 ) { // Ab CS4 Undo bereitstellen		app.doScript(xmlImport, ScriptLanguage.JAVASCRIPT, _dok, UndoModes.ENTIRE_SCRIPT, "XML Import"); 			} 	else {		xmlImport(_dok);	}	_dok.viewPreferences.rulerOrigin =_rulerOrigin;			_dok.zeroPoint = _zeroPoint;} else {	alert ("Kein Dokument geöffnet!")}function xmlImport (_dok) {	with (_dok.xmlImportPreferences)	{		importStyle = XMLImportStyles.MERGE_IMPORT;		createLinkToXML = false;				allowTransform = false;		repeatTextElements = false;		importTextIntoTables = false;		ignoreWhitespace = false;				removeUnmatchedExisting = false;		importCALSTables = false;	}	var _xmlFile = File.openDialog ("Bitte XML Datei auswählen", getFileFilter (".xml", "XML-Datei:"), false);	_dok.importXML(_xmlFile);	var _root = _dok.xmlElements[0];	var _master = _dok.masterSpreads[0];	var _osBild = _dok.objectStyles.itemByName("bild");	var _osLeg = _dok.objectStyles.itemByName("legende");	// Über alle Kind-Elemente iterieren	for (var i = 0; i < _root.xmlElements.length; i++) {		var _rezept = _root.xmlElements[i];		if (_rezept.xmlAttributes.itemByName("art").value == "hauptgericht") {			_master = _dok.masterSpreads.itemByName ("h-hauptgericht");		}		else if (_rezept.xmlAttributes.itemByName("art").value == "vorspeise") {			_master = _dok.masterSpreads.itemByName ("v-vorspeise");		}		else if (_rezept.xmlAttributes.itemByName("art").value == "dessert") {			_master = _dok.masterSpreads.itemByName ("d-dessert");		}					var _page = _dok.pages.add();		_page.appliedMaster = _master;		var _page2 = _dok.pages.add();		_page2.appliedMaster = _master;		var _tf = getMasterPageItem("tf", _page);		var _tf2 = getMasterPageItem("tf", _page2);		_tf.nextTextFrame = _tf2;		_rezept.placeXML (_tf);		var _bc= _rezept.xmlElements.itemByName ("bild-container");		if ( _bc != null ) {			// Bild platzieren			var _gbBild = getBounds(_page2);			var _bild = _bc.xmlElements.itemByName ("bild");			var _rect = _bild.placeIntoFrame(_page2, _gbBild);			_rect.appliedObjectStyle = _osBild;			_rect.fit(FitOptions.FRAME_TO_CONTENT);						_gbBild = _rect.geometricBounds;			// Legende Platzieren			var _leg = _bc.xmlElements.itemByName ("legende");			if (_leg != null) {				_gbLeg = [ _gbBild[2], _gbBild[1], _gbBild[2] + 4.5, _gbBild[3]];				var _rect = _leg.placeIntoFrame (_page2, _gbLeg);				_rect.applyObjectStyle (_osLeg, true);			}		}	} // end for}/*var _xml = _dok.xmlElements[0];$.writeln(_xml.markupTag.name);for (i = 0; i < _xml.xmlElements.length; i++) { 	$.writeln(_xml.xmlElements[i].markupTag.name);		if (_xml.xmlElements[i].xmlAttributes.itemByName("id") != null) $.writeln(_xml.xmlElements[i].xmlAttributes.itemByName("href").value);}var _tf = _dok.pages[0].textFrames.add();_xml.placeXML(_tf);var _res = _xml.evaluateXPathExpression ("//rezept[@art = 'hauptgericht']") ;alert(_res[0].contents);*/// Liefert ein benanntes Seitenobjekt zurück. Unabhängig, ob es sich noch auf der Musterseite befindet oder bereits gelöst wurde // Achtung: Ab CS5 muss sichergestellt sein, dass der Name in der Eigenschaft name enthalten ist (vs. label CS3/CS4)function getMasterPageItem(_label, _page) {	if (_page.appliedMaster == null ) return null; // Keine Musterseite angewendet 	var _pi = _page.pageItems.itemByName(_label);	if (_pi == null ) {		if (_page.side == PageSideOptions.RIGHT_HAND) {			var _mpi = _page.appliedMaster.pages[1].pageItems.itemByName(_label);			try { // Versuche das Objekt zu lösen				return _mpi.override(_page);			} catch (e) { // Es war schon gelöst, da es aber auch in _pi ist, ist es gelöscht worden!				return null;			}		} else { // Left oder Single			var _mpi = _page.appliedMaster.pages[0].pageItems.itemByName(_label);			try {				return _mpi.override(_page);			} catch (e) {				return null;			}		}	}	else { // Object ist schon gelöst...		return _pi;	}}function getBounds(_page) {	var _dok = app.activeDocument;	var _y1 = _page.marginPreferences.top;	var _y2 = _dok.documentPreferences.pageHeight - _page.marginPreferences.bottom;	if (_page.side == PageSideOptions.LEFT_HAND) {		var _x1 = _page.marginPreferences.right;		var _x2 = _dok.documentPreferences.pageWidth - _page.marginPreferences.left;	} 	else {		var _x1 = _page.marginPreferences.left;		var _x2 = _dok.documentPreferences.pageWidth - _page.marginPreferences.right;	}	return [_y1 , _x1 , _y2 , _x2];}// Filter für Dateiauswahl function getFileFilter (_ext, _string) {	if (File.fs == "Windows") {		var _filter = _string + "*"+ _ext;	} 	else {		function _filterFilesMac(file) {			while (file.alias) {				file = file.resolve();				if (file == null) { return false }			}			if (file.constructor.name == "Folder") return true;			var _extension = file.name.toLowerCase().slice(file.name.lastIndexOf("."));			if (_extension.indexOf (_ext) > -1 ) return true;			else return false		}		var _filter = _filterFilesMac;	} 	return _filter;}
+﻿main();
+
+function main () {
+	if (app.documents.length > 0) {
+		var _dok = app.activeDocument;
+		if (!_dok.objectStyles.itemByName("bild").isValid || !_dok.objectStyles.itemByName("legende").isValid || !_dok.objectStyles.itemByName("qr-code").isValid) {
+			alert ("Fehlendes Objektformat [bild], [legende] oder [qr-code]");
+			return;
+		}
+		var _rulerOrigin = _dok.viewPreferences.rulerOrigin;
+		_dok.viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;
+		var _zeroPoint = _dok.zeroPoint;
+		_dok.zeroPoint = [0,0];
+		xmlImport (_dok);	
+		_dok.viewPreferences.rulerOrigin =_rulerOrigin;		
+		_dok.zeroPoint = _zeroPoint;
+	} else {
+		alert ("Kein Dokument geöffnet!")
+	}
+}
+
+function xmlImport (_dok) {
+	with (_dok.xmlImportPreferences)	{
+		importStyle = XMLImportStyles.MERGE_IMPORT;
+		createLinkToXML = false;		
+		allowTransform = false;
+		repeatTextElements = false;
+		importTextIntoTables = false;
+		ignoreWhitespace = false;		
+		removeUnmatchedExisting = false;
+		importCALSTables = false;
+	}
+	var _xmlFile = File.openDialog ("Bitte XML-Datei auswählen");
+	_dok.importXML(_xmlFile);
+	var _rootXML = _dok.xmlElements[0];
+	for (var i = 0; i < _rootXML.xmlElements.length; i++) {
+		var _rezeptXML = _rootXML.xmlElements[i];
+		var _master = _dok.masterSpreads[0];
+		if (_rezeptXML.xmlAttributes.itemByName("art").value == "hauptgericht") {
+			_master = _dok.masterSpreads.itemByName ("h-hauptgericht");
+		}
+		else if (_rezeptXML.xmlAttributes.itemByName("art").value == "vorspeise") {
+			_master = _dok.masterSpreads.itemByName ("v-vorspeise");
+		}
+		else if (_rezeptXML.xmlAttributes.itemByName("art").value == "dessert") {
+			_master = _dok.masterSpreads.itemByName ("d-dessert");
+		}
+		var _page = _dok.pages.add(LocationOptions.AT_END, undefined, {appliedMaster:_master});
+		var _tf = getMasterPageItem("tf", _page);
+		_page = _dok.pages.add(LocationOptions.AT_END, undefined, {appliedMaster:_master});
+		_nextTf = getMasterPageItem("tf", _page);
+		_tf.nextTextFrame = _nextTf;
+		_rezeptXML.placeXML (_tf);
+		var _bcXML = _rezeptXML.xmlElements.itemByName ("bild-container");
+		if (_bcXML.isValid ) {
+			var _gbPage = getBounds(_page);
+			var _bildXML = _bcXML.xmlElements.itemByName ("bild");
+			var _rect = _bildXML.placeIntoFrame(_page, _gbPage);
+			_rect.appliedObjectStyle = _dok.objectStyles.itemByName("bild");
+			_rect.fit(FitOptions.FRAME_TO_CONTENT);			
+			_gbBild = _rect.geometricBounds;
+			var _legXML = _bcXML.xmlElements.itemByName ("legende");
+			if (_legXML.isValid) {
+				_gbLeg = [ _gbBild[2], _gbBild[1], _gbBild[2] + 4.5, _gbBild[3]];
+				var _tf = _legXML.placeIntoFrame (_page, _gbLeg);
+				_tf.appliedObjectStyle = _dok.objectStyles.itemByName("legende");
+			}
+		}
+		var _wlXML = _rezeptXML.xmlElements.itemByName("weblink");
+		if (_wlXML.isValid) {
+			var _qr = _wlXML.placeIntoInlineFrame([20,20]);
+			_qr.appliedObjectStyle = _dok.objectStyles.itemByName("qr-code");
+			var _url = _wlXML.xmlAttributes.itemByName("url").value;
+			var _swatch = _dok.swatches.itemByName("gruen");
+			if (_qr.hasOwnProperty ("createHyperlinkQRCode")) {
+				_qr.createHyperlinkQRCode(_url, _swatch);
+			}
+		}
+	}
+}
+
+
+// Liefert ein benanntes Seitenobjekt zurück. Unabhängig, ob es sich noch auf der Musterseite befindet oder bereits gelöst wurde // Achtung: Ab CS5 muss sichergestellt sein, dass der Name in der Eigenschaft name enthalten ist (vs. label CS3/CS4)
+function getMasterPageItem(_label, _page) {
+	if (_page.appliedMaster == null ) return null; // No MasterPage applied 
+	var _pi = _page.pageItems.itemByName(_label);
+	if (_pi == null ) {
+		if (_page.side == PageSideOptions.RIGHT_HAND) {
+			var _mPage = _page.appliedMaster.pages[1];
+			var _mpi = _mPage.pageItems.itemByName(_label);
+			while (_mpi == null && _mPage.appliedMaster != null) {
+				_mpi = _mPage.appliedMaster.pages[1].pageItems.itemByName(_label);
+				_mPage = _mPage.appliedMaster.pages[1];
+			}
+			try { // Try to release the object
+				var pageItem = _mpi.override(_page);
+				var piBounds = pageItem.geometricBounds;
+				var mpiBounds = _mpi.geometricBounds;
+				if (piBounds[0]  != mpiBounds[0] ||  piBounds[1]  != mpiBounds[1] ) {
+					pageItem.geometricBounds = mpiBounds;
+				} 						
+				return pageItem;
+			} catch (e) { // Object was already released but was deleted as it is also included in _pi!
+				return null;
+			}
+		} else { // Left or Single
+			var _mPage = _page.appliedMaster.pages[0];
+			var _mpi = _mPage.pageItems.itemByName(_label);
+			while (_mpi == null && _mPage.appliedMaster != null) {
+				_mpi = _mPage.appliedMaster.pages[0].pageItems.itemByName(_label);
+				_mPage = _mPage.appliedMaster.pages[0];
+			}					
+			try {
+				var pageItem = _mpi.override(_page);
+				var piBounds = pageItem.geometricBounds;
+				var mpiBounds = _mpi.geometricBounds;
+				if (piBounds[0]  != mpiBounds[0] ||  piBounds[1]  != mpiBounds[1] ) {
+					pageItem.geometricBounds = mpiBounds;
+				} 						
+				return pageItem;
+			} catch (e) {
+				return null;
+			}
+		}
+	}
+	else { // Object has already been released ...
+		return _pi;
+	}
+}
+// Liefert den Satzspiegel der Seite
+function getBounds(_page) {
+	var _dok = app.activeDocument;
+	var _y1 = _page.marginPreferences.top;
+	var _y2 = _dok.documentPreferences.pageHeight - _page.marginPreferences.bottom;
+	if (_page.side == PageSideOptions.LEFT_HAND) {
+		var _x1 = _page.marginPreferences.right;
+		var _x2 = _dok.documentPreferences.pageWidth - _page.marginPreferences.left;
+	} 
+	else {
+		var _x1 = _page.marginPreferences.left;
+		var _x2 = _dok.documentPreferences.pageWidth - _page.marginPreferences.right;
+	}
+	return [_y1 , _x1 , _y2 , _x2];
+}

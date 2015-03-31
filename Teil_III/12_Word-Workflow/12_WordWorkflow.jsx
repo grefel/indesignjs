@@ -1,58 +1,58 @@
-﻿#target InDesign
+﻿main();
 
-// Die Dateien auswählen... Mit getFileFilter() bekommt man einen Filefilter um in Mac bzw. Windows die auszuwählenden Dateien im Dialog einzuschränken
-var _filter = getFileFilter(".indt", "InDesign Template:");
-var _templateFile = File.openDialog("Bitte Template auswählen!", _filter, false);
-var _filter = getFileFilter(".doc", "Word Datei:");
-var _wordFile = File.openDialog("Bite Word Datei auswählen!", _filter, false);
+function main() {
+	// Die Dateien auswählen... Mit getFileFilter() bekommt man einen Filefilter um in Mac bzw. Windows die auszuwählenden Dateien im Dialog einzuschränken
+	var _filter = getFileFilter(".indt", "InDesign Template:");
+	var _templateFile = File.openDialog("Bitte Template auswählen!", _filter, false);
+	var _filter = getFileFilter(".doc", "Word Datei:");
+	var _wordFile = File.openDialog("Bite Word Datei auswählen!", _filter, false);
+	if (_templateFile == null || _wordFile == null) {
+		alert ("Bitte wählen Sie ein Dokument und ein Template aus!");
+		return;
+	}
+	// Existiert der Bilderordner?
+	var _bildFolder = Folder (_wordFile.parent + "/Bilder");
+	if (!_bildFolder.exists) {
+		alert ("Das Verzeichnis für den automatischen Bildimport konnte nicht gefunden werden.");
+		return;
+	}
 
-
-// Wenn etwas ausgewählt wurde, kann das Skript ausgeführt werden 
-if (_templateFile != null && _wordFile != null) {
 	var _userLevel = app.scriptPreferences.userInteractionLevel;
 	app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
-	var _bildFolder = Folder (_wordFile.parent + "/Bilder");
-	if (!_bildFolder.exists) alert ("Das Verzeichnis für den automatischen Bildimport konnte nicht gefunden werden.");
-
-	try {
-			var _dok = app.open(_templateFile);	
-	} catch (e) {
-		alert ("Es ist ein Fehler beim Öffnen von\n" +_templateFile+ "\naufgetreten!\n\n" + e, "Fehler");
-		app.scriptPreferences.userInteractionLevel = _userLevel;
-		exit();
-	}
-	// Wen das Template die Prüfung in checkDok() besteht wird das Skript ausgeführt
-	if (checkDok(_dok)) {
-		var _hMUnits = _dok.viewPreferences.horizontalMeasurementUnits;
-		_dok.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.MILLIMETERS;
-		var _VMUnits = _dok.viewPreferences.verticalMeasurementUnits;
-		_dok.viewPreferences.verticalMeasurementUnits = MeasurementUnits.MILLIMETERS;
-		var _rulerOrigin = _dok.viewPreferences.rulerOrigin;
-		_dok.viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;
-		var _zeroPoint = _dok.zeroPoint;
-		_dok.zeroPoint = [0,0];
-		try {
-			var _story = wordImport (_wordFile, _dok);
-			styleDoc(_story, _dok, _bildFolder);
-			createRegister (_dok);
-			try {
-				_dok.paragraphStyles.itemByName("Bild").remove();
-				_dok.paragraphStyles.itemByName("Kapitelstart").remove();
-			} catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
-		} catch (e) {
-	 		alert ("Es ist ein Fehler aufgetreten: " + e);
-		}
-		_dok.viewPreferences.horizontalMeasurementUnits = _hMUnits;
-		_dok.viewPreferences.verticalMeasurementUnits = _VMUnits;
-		_dok.viewPreferences.rulerOrigin = _rulerOrigin;
-		_dok.zeroPoint = _zeroPoint;
-		app.scriptPreferences.userInteractionLevel = _userLevel;
-	} else {
+	var _dok = app.open(_templateFile);
+	if (checkDok(_dok) == false) {
 		alert ("Das ausgewählte Template entspricht nicht den Vorgaben!");
+		app.scriptPreferences.userInteractionLevel = _userLevel;
+		return;
 	}
-} else {
-	alert ("Bitte wählen Sie ein Dokument und ein Template aus!");
+	var _hMUnits = _dok.viewPreferences.horizontalMeasurementUnits;
+	_dok.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.MILLIMETERS;
+	var _VMUnits = _dok.viewPreferences.verticalMeasurementUnits;
+	_dok.viewPreferences.verticalMeasurementUnits = MeasurementUnits.MILLIMETERS;
+	var _rulerOrigin = _dok.viewPreferences.rulerOrigin;
+	_dok.viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;
+	var _zeroPoint = _dok.zeroPoint;
+	_dok.zeroPoint = [0,0];
+	try {
+		var _story = wordImport (_wordFile, _dok);
+		styleDoc(_story, _dok, _bildFolder);
+		createRegister (_dok);
+		if (_dok.paragraphStyles.itemByName("Bild").isValid) {
+			_dok.paragraphStyles.itemByName("Bild").remove();
+		}
+		if (_dok.paragraphStyles.itemByName("Kapitelstart").isValid) {
+			_dok.paragraphStyles.itemByName("Kapitelstart").remove();
+		}
+	} catch (e) {
+		alert ("Es ist ein Fehler aufgetreten: " + e + "\nZeile "+ e.line);
+	}
+	_dok.viewPreferences.horizontalMeasurementUnits = _hMUnits;
+	_dok.viewPreferences.verticalMeasurementUnits = _VMUnits;
+	_dok.viewPreferences.rulerOrigin = _rulerOrigin;
+	_dok.zeroPoint = _zeroPoint;
+	app.scriptPreferences.userInteractionLevel = _userLevel;
 }
+
 
 // Voraussetzungen prüfen ... 
 function checkDok (_dok) {
@@ -64,15 +64,15 @@ function checkDok (_dok) {
 		}
 	}
 	// Prüfen ob alle Formate vorhanden sind
-	if (_dok.objectStyles.itemByName ("icon") != null &&
-		_dok.objectStyles.itemByName ("bild") != null &&
-		_dok.paragraphStyles.itemByName ("abs") != null &&
-		_dok.paragraphStyles.itemByName ("u1") != null &&
-		_dok.paragraphStyles.itemByName ("u2") != null &&
-		_dok.paragraphStyles.itemByName ("einschub") != null &&
-		_dok.characterStyles.itemByName ("kursiv") != null &&
-		_dok.masterSpreads.itemByName ("V-Vorlage") != null &&
-		_dok.masterSpreads.itemByName ("R-Register") != null ) 
+	if (_dok.objectStyles.itemByName ("icon").isValid &&
+		_dok.objectStyles.itemByName ("bild").isValid &&
+		_dok.paragraphStyles.itemByName ("abs").isValid &&
+		_dok.paragraphStyles.itemByName ("u1").isValid &&
+		_dok.paragraphStyles.itemByName ("u2").isValid &&
+		_dok.paragraphStyles.itemByName ("einschub").isValid &&
+		_dok.characterStyles.itemByName ("kursiv").isValid &&
+		_dok.masterSpreads.itemByName ("V-Vorlage").isValid &&
+		_dok.masterSpreads.itemByName ("R-Register").isValid ) 
 	{
 		return true;
 	} else {
@@ -98,14 +98,14 @@ function wordImport (_wordFile, _dok) {
 		resolveCharacterStyleClash = ResolveStyleClash.RESOLVE_CLASH_USE_EXISTING;
 	}	
 	var _storyArray = _dok.pages[0].place(_wordFile, [24,28], undefined, false, true);
-	var _story = _storyArray[0];		
-	try {
+	var _story = _storyArray[0];
+	if (_dok.paragraphStyles.itemByName("Standard").isValid) {
 		_dok.paragraphStyles.itemByName("Standard").remove(_dok.paragraphStyles.itemByName("abs"));
-	} catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
-	try { _dok.paragraphStyles.itemByName("Überschrift 1").remove(_dok.paragraphStyles.itemByName("u1")); } catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
-	try { _dok.paragraphStyles.itemByName("Überschrift 2").remove(_dok.paragraphStyles.itemByName("u2")); } catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
-	try { _dok.paragraphStyles.itemByName("Hinweistext").remove(_dok.paragraphStyles.itemByName("einschub")); } catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
-	try { _dok.characterStyles.itemByName("Fett").remove(_dok.characterStyles.itemByName("kursiv")); } catch (e) {/*Absatzformatvorlage wurde nicht importiert*/}
+	}
+	if (_dok.paragraphStyles.itemByName("Überschrift 1").isValid) _dok.paragraphStyles.itemByName("Überschrift 1").remove(_dok.paragraphStyles.itemByName("u1"));
+	if (_dok.paragraphStyles.itemByName("Überschrift 2").isValid) _dok.paragraphStyles.itemByName("Überschrift 2").remove(_dok.paragraphStyles.itemByName("u2"));
+	if ( _dok.paragraphStyles.itemByName("Hinweistext").isValid) _dok.paragraphStyles.itemByName("Hinweistext").remove(_dok.paragraphStyles.itemByName("einschub"));
+	if (_dok.characterStyles.itemByName("Fett").isValid) _dok.characterStyles.itemByName("Fett").remove(_dok.characterStyles.itemByName("kursiv")); 
 	checkOverflow(_story);
 	return _story;
 }
@@ -117,7 +117,7 @@ function styleDoc (_story, _dok, _bildFolder) {
 	var _newMaster = _master;
 	for (var i = 0; i < _story.textContainers.length; i++) {
 		var _tc = _story.textContainers[i];
-		var _page = getPageByObject(_tc);
+		var _page = _tc.parentPage;
 		for (k= 0; k < _tc.paragraphs.length; k++) {
 			var _par = _tc.paragraphs[k].getElements()[0];
 			_par.clearOverrides ();
@@ -126,7 +126,7 @@ function styleDoc (_story, _dok, _bildFolder) {
 			if (_pSName == "Kapitelstart" ) {
 				var _kapitelName = _par.words[0].contents;
 				_farbe = _dok.swatches.itemByName(_kapitelName);
-				if (_farbe == null ) _farbe = _dok.swatches.itemByName("Black"); // ab CS4 mit isValid prüfen 
+				if (!_farbe.isValid) _farbe = _dok.swatches.itemByName("Black");
 				var _iconName = _kapitelName.toLowerCase() + "_icon.jpg";
 				var _iconFile = File(_bildFolder + "/" + _iconName);
 				if (_iconFile.exists) {
@@ -189,15 +189,19 @@ function styleDoc (_story, _dok, _bildFolder) {
 		_page.appliedMaster = _master;
 		checkOverflow(_story);
 	} // end for textContainers
-} 
+}
+
 // Index erstellen 
-function createRegister (_dok) {	
+function createRegister (_dok) {
 	if (_dok.indexes.length == 0 ) {
 		var _dokIndex = _dok.indexes.add();
 	} else {
 		var _dokIndex = _dok.indexes[0];
 	}
-	app.findGrepPreferences = NothingEnum.NOTHING;
+	app.findGrepPreferences = NothingEnum.NOTHING;	
+	if (app.findChangeGrepOptions.hasOwnProperty ("searchBackwards")) {
+		app.findChangeGrepOptions.searchBackwards = false;
+	}
 	app.findGrepPreferences.appliedCharacterStyle = app.activeDocument.characterStyles.itemByName("kursiv");
 	_ergebnisArray =_dok.findGrep(true);
 	app.findGrepPreferences = NothingEnum.NOTHING;
@@ -211,10 +215,6 @@ function createRegister (_dok) {
 	_regPage.appliedMaster = _dok.masterSpreads.itemByName ("R-Register");
 	_dok.indexes[0].generate (_regPage, [24,28], undefined, true );		
 }
-
-
-
-
 // Allgemeine Funktionen 
 // Prüft ob der letzte Textrahmen der Story _story einen Texüberlauf hat oder leer ist. Ggf. werden Textrahmen hinzugefügt oder gelöscht
 function checkOverflow(_story) {
@@ -223,22 +223,29 @@ function checkOverflow(_story) {
 	while (_lastTC.overflows && _run) {
 		var _last = _story.textContainers.length -1;
 		if (_story.textContainers[_last].characters.length == 0 && _story.textContainers[_last -1].characters.length == 0 && _story.textContainers[_last -2].characters.length ==0 ) _run = false;
-		var _page = getPageByObject(_lastTC);
+		var _page = _lastTC.parentPage;
 		var _tf = addPageTextFrame(_page);
 		_lastTC.nextTextFrame = _tf;
 		_lastTC = _tf;
 	}
 	while (_lastTC.characters.length == 0) {
-		var _page = getPageByObject(_lastTC);
+		var _page = _lastTC.parentPage;
 		_page.remove();
 		_lastTC = _story.textContainers[_story.textContainers.length - 1];
 	}
 }
 // Fügt eine neue Seite mit einen Textrahmen in der Größe des Satzspiegels hinzu
-function addPageTextFrame(_page) {
+function addPageTextFrame(_page, _master, _newPage) {
+	if (_newPage == undefined)  _newPage = true;
 	var _dok = _page.parent.parent;
-	var _newPage = _dok.pages.add(LocationOptions.AFTER, _page);
-	_newPage.appliedMaster = _page.appliedMaster;
+	if (_newPage ) {
+		var _newPage = _dok.pages.add(LocationOptions.AFTER, _page);
+		if (_master == undefined) _newPage.appliedMaster = _page.appliedMaster;
+		else _newPage.appliedMaster = _master;
+	}
+	else {
+		var _newPage = _page;
+	}
 	var _y1 = _newPage.marginPreferences.top;
 	var _y2 = _dok.documentPreferences.pageHeight - _newPage.marginPreferences.bottom;
 	if (_newPage.side == PageSideOptions.LEFT_HAND) {
@@ -251,36 +258,57 @@ function addPageTextFrame(_page) {
 	}
 	var _tf = _newPage.textFrames.add();
 	_tf.geometricBounds = [_y1 , _x1 , _y2 , _x2];
+	_tf.textFramePreferences.textColumnCount = _newPage.marginPreferences.columnCount;
+	_tf.textFramePreferences.textColumnGutter =  _newPage.marginPreferences.columnGutter
 	return _tf;
 }
-
-
 // Liefert ein benanntes Seitenobjekt zurück. Unabhängig, ob es sich noch auf der Musterseite befindet oder bereits gelöst wurde // Achtung: Ab CS5 muss sichergestellt sein, dass der Name in der Eigenschaft name enthalten ist (vs. label CS3/CS4)
 function getMasterPageItem(_label, _page) {
-	if (_page.appliedMaster == null ) return null; // Keine Musterseite angewendet 
+	if (_page.appliedMaster == null ) return null; // No MasterPage applied 
 	var _pi = _page.pageItems.itemByName(_label);
 	if (_pi == null ) {
 		if (_page.side == PageSideOptions.RIGHT_HAND) {
-			var _mpi = _page.appliedMaster.pages[1].pageItems.itemByName(_label);
-			try { // Versuche das Objekt zu lösen
-				return _mpi.override(_page);
-			} catch (e) { // Es war schon gelöst, da es aber auch in _pi ist, ist es gelöscht worden!
+			var _mPage = _page.appliedMaster.pages[1];
+			var _mpi = _mPage.pageItems.itemByName(_label);
+			while (_mpi == null && _mPage.appliedMaster != null) {
+				_mpi = _mPage.appliedMaster.pages[1].pageItems.itemByName(_label);
+				_mPage = _mPage.appliedMaster.pages[1];
+			}
+			try { // Try to release the object
+				var pageItem = _mpi.override(_page);
+				var piBounds = pageItem.geometricBounds;
+				var mpiBounds = _mpi.geometricBounds;
+				if (piBounds[0]  != mpiBounds[0] ||  piBounds[1]  != mpiBounds[1] ) {
+					pageItem.geometricBounds = mpiBounds;
+				} 						
+				return pageItem;
+			} catch (e) { // Object was already released but was deleted as it is also included in _pi!
 				return null;
 			}
-		} else { // Left oder Single
-			var _mpi = _page.appliedMaster.pages[0].pageItems.itemByName(_label);
+		} else { // Left or Single
+			var _mPage = _page.appliedMaster.pages[0];
+			var _mpi = _mPage.pageItems.itemByName(_label);
+			while (_mpi == null && _mPage.appliedMaster != null) {
+				_mpi = _mPage.appliedMaster.pages[0].pageItems.itemByName(_label);
+				_mPage = _mPage.appliedMaster.pages[0];
+			}					
 			try {
-				return _mpi.override(_page);
+				var pageItem = _mpi.override(_page);
+				var piBounds = pageItem.geometricBounds;
+				var mpiBounds = _mpi.geometricBounds;
+				if (piBounds[0]  != mpiBounds[0] ||  piBounds[1]  != mpiBounds[1] ) {
+					pageItem.geometricBounds = mpiBounds;
+				} 						
+				return pageItem;
 			} catch (e) {
 				return null;
 			}
 		}
 	}
-	else { // Object ist schon gelöst...
+	else { // Object has already been released ...
 		return _pi;
 	}
 }
-
 // Liefert die Versalhöhe von _char zurück
 function getCapHeight (_char) {
 	var _tf = app.activeDocument.textFrames.add();
@@ -295,30 +323,6 @@ function getCapHeight (_char) {
 	_tf.remove();
 	return _versalHoehe;
 }
-
-// Liefert die Seite, auf der sich das Objekt _object befindet, zurück
-function getPageByObject (_object){ 
-	if (_object.hasOwnProperty("baseline")) {
-		_object = _object.parentTextFrames[0];
-	}
-	while (_object != null) {
-		if (_object.hasOwnProperty ("parentPage")) return _object.parentPage;
-		var whatIsIt = _object.constructor;
-		switch (whatIsIt) {
-			case Page : return _object;
-			case Character : _object = _object.parentTextFrames[0]; break;
-			case Footnote :; // drop through
-			case Cell : _object = _object.insertionPoints[0].parentTextFrames[0]; break;
-			case Note : _object = _object.storyOffset.parentTextFrames[0]; break;
-			case XMLElement : if (_object.insertionPoints[0] != null) { _object = _object.insertionPoints[0].parentTextFrames[0]; break; }
-			case Application : return null;
-			default: _object = _object.parent;
-		}
-		if (_object == null) return null;
-	}
-	return _object;
-}
-
 // Optimiert die Funktion nextItem() der Sammlung Paragraphs, Dieser Ansatz liefert bei großen Textmengen deutlich schneller den nächsten Absatz als nextItem()
 function nextParagraph(_par) {
 	var _lastCharLetzterIndex = _par.characters[-1].index;
@@ -329,7 +333,9 @@ function nextParagraph(_par) {
 // Filter für Dateiauswahl 
 function getFileFilter (_ext, _string) {
 	if (File.fs == "Windows") {
-		var _filter = _string + "*"+ _ext;
+		_ext =_ext.replace(/\*/g, "");
+		_string =_string.replace(/:/g, "");
+		var _filter = _string + ":*"+ _ext;
 	} 
 	else {
 		function _filterFilesMac(file) {

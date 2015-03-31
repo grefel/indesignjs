@@ -1,4 +1,3 @@
-#target InDesign
 // Das Skript zeigt alle Eigenschaften und Methoden eines ausgewählten Objekts an
 var _ial = app.scriptPreferences.userInteractionLevel;
 app.scriptPreferences.userInteractionLevel = UserInteractionLevels.INTERACT_WITH_ALL;

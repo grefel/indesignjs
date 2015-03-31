@@ -1,9 +1,8 @@
-#target InDesign
-if (app.documents.length > 0) {
+﻿if (app.documents.length > 0) {
 	var _dok = app.activeDocument;
 	var _absF = _dok.paragraphStyles.itemByName("abs_linie");
 	var _objektF = _dok.objectStyles.item("transparent");
-	if (_objektF == null) {
+	if (!_objektF.isValid) {
 		_objektF = _dok.objectStyles.add();
 		_objektF.name = "transparent";
 	}
@@ -14,9 +13,7 @@ if (app.documents.length > 0) {
 	_dok.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.POINTS;
 	_dok.viewPreferences.verticalMeasurementUnits = MeasurementUnits.POINTS;
 	_dok.zeroPoint = [0,0]
-	// Ab CS4 Undo bereitstellen
-	if (app.scriptPreferences.version >= 6 ) app.doScript(absatzLinien, ScriptLanguage.JAVASCRIPT , [], UndoModes.ENTIRE_SCRIPT, "Absatzlinien"); 		
-	else absatzLinien();
+	app.doScript(absatzLinien, ScriptLanguage.JAVASCRIPT , [], UndoModes.ENTIRE_SCRIPT, "Absatzlinien"); 		
 	_dok.viewPreferences.horizontalMeasurementUnits = _hMU;
 	_dok.viewPreferences.verticalMeasurementUnits = _vMU;
 	_dok.zeroPoint = _zP;
@@ -25,7 +22,7 @@ if (app.documents.length > 0) {
 }
 
 function absatzLinien() {
-	while (_dok.rectangles.itemByName("%scriptObj%") != null) {
+	while (_dok.rectangles.itemByName("%scriptObj%").isValid) {
 		_dok.rectangles.itemByName("%scriptObj%").remove();
 	}
 	var _allPars = _dok.stories.everyItem().paragraphs.everyItem().getElements();
@@ -47,11 +44,10 @@ function absatzLinien() {
 				var _rect = _dok.rectangles.add(_tf.itemLayer, LocationOptions.AFTER , _tf);
 				_rect.appliedObjectStyle = _objektF;
 				_rect.geometricBounds = [_y1, _x1, _y2, _x2];
-				if (app.scriptPreferences.version > 6) _rect.name = "%scriptObj%";
-				_rect.label = "%scriptObj%";
+				_rect.name = "%scriptObj%";
 			}
 		}
-	}	
+	}
 }
 
 

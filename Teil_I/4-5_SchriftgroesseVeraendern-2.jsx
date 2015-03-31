@@ -1,5 +1,4 @@
-#target InDesign
-var _dok = app.activeDocument;
+﻿var _dok = app.activeDocument;
 var _textAbschnitte = _dok.stories;
 for (var k = 0; k < _textAbschnitte.length; k++) {
 	var _textAbschnitt = _textAbschnitte[k];

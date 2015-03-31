@@ -1,6 +1,5 @@
-#target InDesign
-var _dok = app.activeDocument;
-if (_dok.swatches.itemByName("Rot") == null) { // CS4/CS5 (_dok.swatches.itemByName("Rot").isValid != true)
+﻿var _dok = app.activeDocument;
+if (!_dok.swatches.itemByName("Rot").isValid ) {
 	var _farbFeld = _dok.colors.add();
 	_farbFeld.name = "Rot";
 	_farbFeld.model = ColorModel.PROCESS;

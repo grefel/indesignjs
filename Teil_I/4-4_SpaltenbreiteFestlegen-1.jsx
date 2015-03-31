@@ -1,5 +1,4 @@
-﻿#target InDesign
-var _table = app.selection[0];
+﻿var _table = app.selection[0];
 _table.columns[0].width = 25;
 var _spAnzahl = _table.columns.length;
 var _textRahmenBreite = 100;

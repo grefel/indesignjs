@@ -1,8 +1,7 @@
-﻿#target InDesign
-//DESCRIPTION: Beschreibung des Skripts 
+﻿//DESCRIPTION: Beschreibung des Skripts 
 /*	Ausführlicher Kommentar
 	Autor: Gregor Fellenz
-	Datum: 2010-10-12
+	Datum: 2015-01-15
 	*/
 if (app.documents.length > 0) {
 	var _userLevel = app.scriptPreferences.userInteractionLevel;
@@ -30,13 +29,15 @@ if (app.documents.length > 0) {
 				"\nSkript: " + e.fileName );
 	}
 
-	app.scriptPreferences.userInteractionLevel = _userLevel;
-	// app.scriptPreferences.version = _version
-	_dok.viewPreferences.horizontalMeasurementUnits = _hMUnits;
-	_dok.viewPreferences.verticalMeasurementUnits = _VMUnits;
-	_dok.viewPreferences.rulerOrigin = _rulerOrigin;
-	_dok.zeroPoint = _zeroPoint;										
-	_dok.layoutWindows[0].transformReferencePoint = _tRPoint;
+	finally {
+		app.scriptPreferences.userInteractionLevel = _userLevel;
+		// app.scriptPreferences.version = _version
+		_dok.viewPreferences.horizontalMeasurementUnits = _hMUnits;
+		_dok.viewPreferences.verticalMeasurementUnits = _VMUnits;
+		_dok.viewPreferences.rulerOrigin = _rulerOrigin;
+		_dok.zeroPoint = _zeroPoint;										
+		_dok.layoutWindows[0].transformReferencePoint = _tRPoint;		
+	}
 } else {
 	alert ("Es ist kein Dokument geöffnet");
 }

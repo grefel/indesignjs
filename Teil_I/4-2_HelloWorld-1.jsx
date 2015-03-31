@@ -1,2 +1,1 @@
-#target InDesign
-alert ("Hallo Welt");
+﻿alert ("Hallo Welt");

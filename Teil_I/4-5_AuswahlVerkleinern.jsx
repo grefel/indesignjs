@@ -1,5 +1,4 @@
-#target InDesign
-var _auswahl = app.selection[0];
+﻿var _auswahl = app.selection[0];
 var _schriftG = _auswahl.characters[0].pointSize;
 var _kleinsterBuchstabe = _schriftG * 0.4; // 40 Prozent
 var _laenge = _auswahl.characters.length;

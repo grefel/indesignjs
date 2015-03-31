@@ -1,16 +1,10 @@
-#target InDesign
-if (app.documents.length > 0) {
+﻿if (app.documents.length > 0) {
 	var _dok = app.activeDocument;
 	var _rulerOrigin = _dok.viewPreferences.rulerOrigin;
 	_dok.viewPreferences.rulerOrigin = RulerOrigin.PAGE_ORIGIN;
 	var _zeroPoint = _dok.zeroPoint;
 	_dok.zeroPoint = [0,0];
-	if (app.scriptPreferences.version >= 6 ) { // Ab CS4 Undo bereitstellen
-		app.doScript(bildQuellen, ScriptLanguage.JAVASCRIPT, _dok, UndoModes.ENTIRE_SCRIPT, "Marginalie erstellen"); 		
-	} 
-	else {
-		bildQuellen(_dok);
-	}
+	app.doScript(bildQuellen, ScriptLanguage.JAVASCRIPT, _dok, UndoModes.ENTIRE_SCRIPT, "Marginalie erstellen"); 		
 	_dok.viewPreferences.rulerOrigin =_rulerOrigin;		
 	_dok.zeroPoint = _zeroPoint;
 } else {
@@ -21,58 +15,34 @@ if (app.documents.length > 0) {
 function bildQuellen (_dok) {
 	var _master = _dok.masterSpreads.itemByName("Q-Bildquellen");
 	var _tf = addPageTextFrame(_dok.pages[-1], _master);
-	_tf.contents = "Bildquellenverzeichnis";
+	_tf.contents = "Bildquellenverzeichnis\r";
 	var _bildQuellen = [];		
 	for (var i =0 ; i < _dok.links.length; i++) {
 		var _link = _dok.links[i];
-		var _page = getPageByObject (_link);			
-		if (_page != null ) {			
+		if (_link.parent.hasOwnProperty("parentPage") && _link.parent.parentPage != null ) {			
+			var _page = _link.parent.parentPage;
 			try {
 				 var _author = _link.linkXmp.author;
-				 var _bq = [_author, _page.name];
+				 var _bq = {autor:_author, seite:_page.name};
 			} 
 			catch (e) {
-				var _bq = ["Kein Autor", _page.name];
+				var _bq = {autor:"Kein Autor", seite:_page.name};
 			}
 			_bildQuellen.push(_bq);
 		}
 	}
-	_bildQuellen.sort(sort_DE_Special);	
-	_tf.insertionPoints[-1].contents = "\r";
-	_tf.insertionPoints[-1].contents = _bildQuellen[0][0] + "\t"+ _bildQuellen[0][1];
+	_bildQuellen.sort(sort_DE_Special);
+	_tf.insertionPoints[-1].contents = _bildQuellen[0].autor + "\t"+ _bildQuellen[0].seite;
 	for (var i =1; i <_bildQuellen.length; i++) {
-		if (_bildQuellen[i][0] == _bildQuellen[i-1][0]) _tf.contents = _tf.contents + ", " + _bildQuellen[i][1];
-		else _tf.contents = _tf.contents + "\r" + _bildQuellen[i][0] + "\t"+ _bildQuellen[i][1];
+		if (_bildQuellen[i].autor == _bildQuellen[i-1].autor) _tf.contents = _tf.contents + ", " + _bildQuellen[i].seite;
+		else _tf.contents = _tf.contents + "\r" + _bildQuellen[i].autor + "\t"+ _bildQuellen[i].seite;
 	}	
 }
 
-//~ $.writeln(_link.linkXmp.getProperty("http://ns.adobe.com/photoshop/1.0/", "Country"));			
-
+//~ $.writeln(_link.linkXmp.getProperty("http://ns.adobe.com/photoshop/1.0/", "Country"));
 
 // Funktionen ... 
-// getPageByObject() Findet die Seite, auf der sich das Objekt, das im ersten Parameter übergeben wird, befindet.
-// Wenn sich das Objekt nicht auf einer Seite befindet, liefert die Funktion null zurück.
-function getPageByObject (_objekt){ 
-	if (_objekt.hasOwnProperty("baseline")) {
-		_objekt = _objekt.parentTextFrames[0];
-	}
-	while (_objekt != null) {
-		if (_objekt.hasOwnProperty ("parentPage")) return _objekt.parentPage;
-		var whatIsIt = _objekt.constructor;
-		switch (whatIsIt) {
-			case Page : return _objekt;
-			case Character : _objekt = _objekt.parentTextFrames[0]; break;
-			case Footnote :; // drop through
-			case Cell : _objekt = _objekt.insertionPoints[0].parentTextFrames[0]; break;
-			case Note : _objekt = _objekt.storyOffset.parentTextFrames[0]; break;
-			case XMLElement : if (_objekt.insertionPoints[0] != null) { _objekt = _objekt.insertionPoints[0].parentTextFrames[0]; break; }
-			case Application : return null;
-			default: _objekt = _objekt.parent;
-		}
-		if (_objekt == null) return null;
-	}
-	return _objekt
-}
+
 /** Deutsche Umlaute ersetzen */ 
 // Die Hilfsfunktion dU wird für die Ausführung benötigt 
 function sort_DE (a, b) {
@@ -82,10 +52,10 @@ function sort_DE (a, b) {
 	if (a > b) return 1;
 	else return -1;
 }
-// Diese Funktion berücksichtigt, dass die Elemente des Arrays wiederum Arrays mit zwei Elementen sind, es wird nach dem erseten Element sortiert
+// Diese Funktion berücksichtigt, dass die Elemente des Arrays Objekte enthalten
 function sort_DE_Special(a,b) {
-	var x = dU(a[0]) + a[1];
-	var y = dU(b[0]) + b[1];
+	var x = dU(a.autor) + a.seite;
+	var y = dU(b.autor) + b.seite;
 	if (x==y) return 0;
 	if (x > y) return 1;
 	else return -1;
@@ -99,11 +69,17 @@ function dU (a) {
 	return a;
 }
 // Fügt eine neue Seite mit einen Textrahmen in der Größe des Satzspiegels hinzu
-function addPageTextFrame(_page, _master) {
+function addPageTextFrame (_page, _master, _newPage) {
+	if (_newPage == undefined)  _newPage = true;
 	var _dok = _page.parent.parent;
-	var _newPage = _dok.pages.add(LocationOptions.AFTER, _page);
-	if (_master == undefined) _newPage.appliedMaster = _page.appliedMaster;
-	else _newPage.appliedMaster = _master;
+	if (_newPage ) {
+		var _newPage = _dok.pages.add(LocationOptions.AFTER, _page);
+		if (_master == undefined) _newPage.appliedMaster = _page.appliedMaster;
+		else _newPage.appliedMaster = _master;
+	}
+	else {
+		var _newPage = _page;
+	}
 	var _y1 = _newPage.marginPreferences.top;
 	var _y2 = _dok.documentPreferences.pageHeight - _newPage.marginPreferences.bottom;
 	if (_newPage.side == PageSideOptions.LEFT_HAND) {
@@ -115,6 +91,8 @@ function addPageTextFrame(_page, _master) {
 		var _x2 = _dok.documentPreferences.pageWidth - _newPage.marginPreferences.right;
 	}
 	var _tf = _newPage.textFrames.add();
-	_tf.geometricBounds = [_y1 , _x1 , _y2 , _x2];
+	_tf.geometricBounds = [_y1 , _x1 , _y2 , _x2];	
+	_tf.textFramePreferences.textColumnCount = _newPage.marginPreferences.columnCount;
+	_tf.textFramePreferences.textColumnGutter =  _newPage.marginPreferences.columnGutter	
 	return _tf;
 }

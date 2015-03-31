@@ -1,5 +1,4 @@
-#target InDesign
-var _dok = app.activeDocument;
+﻿var _dok = app.activeDocument;
 var _alleSeiten = _dok.pages;
 for (var i = 0; i < _alleSeiten.length; i++) {
 	var _seite = _alleSeiten[i];

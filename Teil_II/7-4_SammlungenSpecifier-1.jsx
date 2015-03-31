@@ -1,5 +1,4 @@
-#target InDesign
-app.documents.add();
+﻿app.documents.add();
 app.documents.add();
 app.documents.add();
 var _specifier = app.documents.itemByName("DokumentName.indd");

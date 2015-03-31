@@ -1,14 +1,13 @@
-#target InDesign
-//DESCRIPTION: Beschreibung des Skripts 
+﻿//DESCRIPTION: Beschreibung des Skripts 
 /*	Ausführlicher Kommentar
 	Autor: Gregor Fellenz
-	Datum: 2010-10-12
+	Datum: 2015-01-15
 */
 if (app.documents.length > 0) {
 	var _userLevel = app.scriptPreferences.userInteractionLevel;
 	app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT; // gegebenenfalls  app.scriptPreferences.userInteractionLevel = UserInteractionLevels.INTERACT_WITH_ALL;
 	var _version = app.scriptPreferences.version;
-	// Bei Bedarf: app.scriptPreferences.version = 5;
+	// Bei Bedarf: app.scriptPreferences.version = 8;
 	// Die folgenden Punkte können hier nur gesetzt werden, wenn ein geöffnetes Dokument bearbeitet wird
 	var _dok = app.activeDocument;
 	var _hMUnits = _dok.viewPreferences.horizontalMeasurementUnits;

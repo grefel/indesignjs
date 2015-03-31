@@ -1,5 +1,4 @@
-﻿#target InDesign
-var _dok = app.documents.add()
+﻿var _dok = app.documents.add()
 var _tf = _dok.textFrames.add();
 _tf.geometricBounds = [0,0,_dok.documentPreferences.pageHeight,_dok.documentPreferences.pageWidth];
 _tf.textFramePreferences.verticalJustification = VerticalJustification.CENTER_ALIGN;

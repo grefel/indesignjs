@@ -1,4 +1,3 @@
-#target InDesign
 var _auswahl = app.selection[0];
 var _datei = File.openDialog ("Bitte eine Bilddatei auswählen");
 if (_auswahl.constructor.name =="Rectangle" && _datei != null) {

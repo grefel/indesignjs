@@ -1,5 +1,4 @@
-﻿#target InDesign
-var _auswahl = app.selection[0];
+﻿var _auswahl = app.selection[0];
 if (_auswahl.itemLayer.name == "Ebene1") {
 	alert ("Auswahl ist auf Ebene1");
 } else if (_auswahl.itemLayer.name == "Ebene2") {

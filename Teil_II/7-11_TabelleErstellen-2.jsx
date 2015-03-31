@@ -1,5 +1,4 @@
-﻿#target InDesign
-var _tf = app.activeDocument.textFrames[0];
+﻿var _tf = app.activeDocument.textFrames[0];
 var _tabelle = _tf.tables.add();
 _tabelle.columnCount =3;
 _tabelle.bodyRowCount = 5;

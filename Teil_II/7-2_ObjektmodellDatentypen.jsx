@@ -1,5 +1,4 @@
-#target InDesign
-var _dokObjekt = app.documents[0];
+﻿var _dokObjekt = app.documents[0];
 var _rahmenObjekt = _dokObjekt.pageItems[0];
 _rahmenObjekt.rotationAngle = 45;
 _rahmenObjekt.geometricBounds = [10,10,100,100];

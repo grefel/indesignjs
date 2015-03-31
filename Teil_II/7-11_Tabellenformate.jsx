@@ -1,4 +1,3 @@
-#target InDesign
 var _dok = app.activeDocument;
 var _tabelle = app.selection[0];
 _tabelle.appliedTableStyle = _dok.tableStyles.itemByName("Tabellenformat");

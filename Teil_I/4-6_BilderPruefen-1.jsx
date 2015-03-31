@@ -1,5 +1,4 @@
-#target InDesign
-var _dok = app.activeDocument;
+﻿var _dok = app.activeDocument;
 var _alleBilder = _dok.allGraphics;
 for (var i = 0; i < _alleBilder.length; i++) {
 	var _bild = _alleBilder[i];

@@ -1,127 +1,153 @@
-#target InDesign
-var _ial = app.scriptPreferences.userInteractionLevel;
-app.scriptPreferences.userInteractionLevel = UserInteractionLevels.INTERACT_WITH_ALL;
-if (app.documents.length > 0 && app.activeDocument.layoutWindows.length > 0) tabellenSuchen();
-else alert("Kein Dokuemnt geöffnet","Hinweis");  
-app.scriptPreferences.userInteractionLevel = _ial;
+﻿if (app.documents.length > 0 && app.activeDocument.layoutWindows.length > 0) {
+	var _ial = app.scriptPreferences.userInteractionLevel;
+	app.scriptPreferences.userInteractionLevel = UserInteractionLevels.INTERACT_WITH_ALL;
+	tabellenSuchen();
+	app.scriptPreferences.userInteractionLevel = _ial;
+}
+else {
+	alert("Kein Dokuemnt geöffnet", "Hinweis");
+}
+
 
 function tabellenSuchen() {
-	var _dlg = app.dialogs.add({name:"Tabellen Suchen/Ersetzen"});
-	// Dialog bauen ...
-	var _width = 150;	
-	with (_dlg) {
-		with (dialogColumns.add()) {
-			with (borderPanels.add()) {
-				with (dialogColumns.add()) {
-					staticTexts.add( {staticLabel: "Tabellenformat:", minWidth:_width} );
-					staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
-				} 
-				with (dialogColumns.add()) {
-					var _tsDropDown = dropdowns.add();
-					var _list = (app.activeDocument.tableStyles.everyItem().name);
-					_list.unshift ("Ignorieren");					
-					_tsDropDown.stringList = _list;
-					var _ignoreTS = checkboxControls.add({checkedState: true});
-				} 
-			}
-			with (borderPanels.add()) {
-				with (dialogColumns.add()) {
-					staticTexts.add( {staticLabel: "Zellenformat von Spalte:", minWidth:_width} );
-					staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
-				} 
-				with (dialogColumns.add()) {
-					var _colIndexDrop = integerComboboxes.add({editContents:"1"});
-					var _ignoreColS = checkboxControls.add({checkedState: true});
-				}
-				with (dialogColumns.add()) {
-					var _colDropDown = dropdowns.add();
-					var _list = app.activeDocument.cellStyles.everyItem().name;
-					_list.unshift ("Ignorieren");					
-					_colDropDown.stringList = _list;
-				}
-			}
-			with (borderPanels.add()) {
-				with (dialogColumns.add()) {
-					staticTexts.add( {staticLabel: "Zellenformat von Zeile:", minWidth:_width} );
-					staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
-				}
-				with (dialogColumns.add()) {
-					var _rowIndexDrop = integerComboboxes.add({editContents:"1"});
-					var _ignoreRowS = checkboxControls.add({checkedState: true});
-				} 
-				with (dialogColumns.add()) {
-					var _rowDropDown = dropdowns.add();
-					var _list = app.activeDocument.cellStyles.everyItem().name;
-					_list.unshift ("Ignorieren");					
-					_rowDropDown.stringList = _list;
-				}
-			}
-			with (dialogRows.add()) {
-				var _ende = checkboxControls.add({staticLabel: "Skriptausführung beenden", checkedState: false});
-			}	
-		}
+
+	var _replaceValues = {
+		tableStyles:app.activeDocument.tableStyles.everyItem().name,
+		tableStylesSelectedIndex:0,
+		tableStylesIgnore:true,
+		tableStylesCellIgnore:true,
+		cellStyles:app.activeDocument.cellStyles.everyItem().name,
+		colNumber:"1",
+		colCellStylesSelectedIndex:0,
+		colCellStylesIgnore:true,
+		rowNumber:"1",
+		rowCellStylesSelectedIndex:0,
+		rowCellStylesIgnore:true
 	}
-	// Das eigentliche Skript	... 
+	_replaceValues.tableStyles.unshift ("Ignorieren");
+	_replaceValues.cellStyles.unshift ("Ignorieren");
+	
+	
 	var _dok = app.activeDocument;
-	// Alle Objekte die Tabellen beinhalten können einsammeln...
-	var _as = _dok.stories.everyItem().getElements();
-	if (_dok.stories.everyItem().footnotes.length > 0) {
-		_as = _as.concat(_dok.stories.everyItem().footnotes.everyItem().texts.everyItem().getElements());
-	}
-	if (_dok.stories.everyItem().tables.length > 0 ) { 
-		_as = _as.concat(_dok.stories.everyItem().tables.everyItem().cells.everyItem().getElements());	
-	}
-	// Schleife über Objekte die Tabellen beinhalten können 
-	for (var i =0; i < _as.length ; i++) {
-		for (var k = 0; k < _as[i].tables.length; k++) {
-			var _table = _as[i].tables[k];
-			showIt(_table)
-			// Dialog verändern, Zeilen und Spalten der aktuellen Tabelle ermitteln
-			var _list = [];			
-			for (var m =0; m < _table.rows.everyItem().index.length; m++) {
-				_list.push ((_table.rows.everyItem().index[m] + 1) + "");
-			}
-			_rowIndexDrop.stringList = _list;
-			_rowIndexDrop.editContents = "1";
-			_list = [];
-			for (var m =0; m < _table.columns.everyItem().index.length; m++) {
-				_list.push ((_table.columns.everyItem().index[m]+ 1)+ "");
-			}
-			_colIndexDrop.stringList = _list;
-			_colIndexDrop.editContents = "1";		 
-			if (_dlg.show() == true) {
-				// selectedIndex == -1 leer, ==0 => Ignorieren 
-				if (_tsDropDown.selectedIndex > 0) {
-					var _tableStyle = _dok.tableStyles[_tsDropDown.selectedIndex -1];
-					_table.appliedTableStyle = _tableStyle;
-					if(_ignoreTS.checkedState) { 
-						_table.clearTableStyleOverrides ();
+	app.findTextPreferences = NothingEnum.NOTHING;
+	app.findTextPreferences.findWhat = "<0016>";
+	var _tableChars = _dok.findText();
+	app.findTextPreferences = NothingEnum.NOTHING;
+	// Schleife über die Zeichen die eine Tabellen beinhalten
+	for (var i =0; i < _tableChars.length ; i++) {
+		var _table = _tableChars[i].tables[0];
+		showIt(_table)
+		// Dialog bauen ...
+		var _dlg = app.dialogs.add({name:"Tabellen Suchen/Ersetzen"});
+		var _width = 150;	
+		with (_dlg) {
+			with (dialogColumns.add()) {
+				with (borderPanels.add()) {
+					with (dialogColumns.add()) {
+						staticTexts.add( {staticLabel: "Tabellenformat:", minWidth:_width} );
+						staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
+						staticTexts.add( {staticLabel: "Abweichungen aller Zellen löschen:", minWidth:_width} );
+					} 
+					with (dialogColumns.add()) {
+						var _tsDropDown = dropdowns.add();
+						_tsDropDown.stringList = _replaceValues.tableStyles;
+						_tsDropDown.selectedIndex = _replaceValues.tableStylesSelectedIndex
+						var _ignoreTS = checkboxControls.add({checkedState: _replaceValues.tableStylesIgnore});
+						var _ignoreTCS = checkboxControls.add({checkedState: _replaceValues.tableStylesCellIgnore});
+					} 
+				}
+				with (borderPanels.add()) {
+					with (dialogColumns.add()) {
+						staticTexts.add( {staticLabel: "Zellenformat von Spalte:", minWidth:_width} );
+						staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
+					} 
+					with (dialogColumns.add()) {
+						var _colIndexDrop = integerComboboxes.add({editContents:_replaceValues.colNumber});
+						var _ignoreColS = checkboxControls.add({checkedState: _replaceValues.colCellStylesIgnore});
+					}
+					with (dialogColumns.add()) {
+						var _colDropDown = dropdowns.add();
+						_colDropDown.stringList = _replaceValues.cellStyles;
+						_colDropDown.selectedIndex = _replaceValues.colCellStylesSelectedIndex;
 					}
 				}
-				if (_colDropDown.selectedIndex > 0) {
-					var _cellStyle = _dok.cellStyles[_colDropDown.selectedIndex -1];
-					var _col = _table.columns[_colIndexDrop.editValue -1];
-					_col.cells.everyItem().appliedCellStyle	= _cellStyle;
-					if(_ignoreColS.checkedState) { 
-						_col.cells.everyItem().clearCellStyleOverrides ();
+				with (borderPanels.add()) {
+					with (dialogColumns.add()) {
+						staticTexts.add( {staticLabel: "Zellenformat von Zeile:", minWidth:_width} );
+						staticTexts.add( {staticLabel: "Abweichungen löschen:", minWidth:_width} );
+					}
+					with (dialogColumns.add()) {
+						var _rowIndexDrop = integerComboboxes.add({editContents:_replaceValues.rowNumber});
+						var _ignoreRowS = checkboxControls.add({checkedState: _replaceValues.rowCellStylesIgnore});
+					} 
+					with (dialogColumns.add()) {
+						var _rowDropDown = dropdowns.add();
+						_rowDropDown.stringList = _replaceValues.cellStyles;
+						_rowDropDown.selectedIndex = _replaceValues.rowCellStylesSelectedIndex;
 					}
 				}
-				if (_rowDropDown.selectedIndex > 0) {
-					var _cellStyle = _dok.cellStyles[_rowDropDown.selectedIndex -1];
-					var _row = _table.rows[_rowIndexDrop.editValue -1];
-					_row.cells.everyItem().appliedCellStyle = _cellStyle;
-					if(_ignoreRowS.checkedState) { 
-						_row.cells.everyItem().clearCellStyleOverrides ();
-					}
-				}
-			}
-			if (_ende.checkedState) {
-				_dlg.destroy();
-				return;
+				with (dialogRows.add()) {
+					var _ende = checkboxControls.add({staticLabel: "Skriptausführung beenden", checkedState: false});
+				}	
 			}
 		}
+		// Dialog an die aktuelle Tabelle anpassen
+		var _list = [];
+		for (var m =0; m < _table.rows.everyItem().index.length; m++) {
+			_list.push ((_table.rows.everyItem().index[m] + 1) + "");
+		}
+		_rowIndexDrop.stringList = _list;
+		if (_replaceValues.rowNumber*1  > _list.length) _rowIndexDrop.editContents = "1";
+		else _rowIndexDrop.editContents  = _replaceValues.rowNumber;
+		_list = [];
+		for (var m =0; m < _table.columns.everyItem().index.length; m++) {
+			_list.push ((_table.columns.everyItem().index[m]+ 1)+ "");
+		}
+		_colIndexDrop.stringList = _list;
+		if (_replaceValues.colNumber*1  > _list.length) _colIndexDrop.editContents = "1";
+		else _colIndexDrop.editContents  = _replaceValues.colNumber;
+
+		if (_dlg.show() == true) {
+			// selectedIndex == -1 leer, ==0 => Ignorieren 
+			_replaceValues.tableStylesIgnore = _ignoreTS.checkedState;
+			_replaceValues.tableStylesCellIgnore = _ignoreTCS.checkedState;
+
+			if (_tsDropDown.selectedIndex > 0) {
+				_replaceValues.tableStylesSelectedIndex = _tsDropDown.selectedIndex;
+				var _tableStyle = _dok.tableStyles[_tsDropDown.selectedIndex -1];
+				_table.appliedTableStyle = _tableStyle;
+				if(_ignoreTS.checkedState) _table.clearTableStyleOverrides ();
+				if(_ignoreTCS.checkedState) _table.cells.everyItem().clearCellStyleOverrides ();
+			}
+			_replaceValues.colNumber = _colIndexDrop.editContents;
+			_replaceValues.colCellStylesIgnore = _ignoreColS.checkedState;
+			if (_colDropDown.selectedIndex > 0) {
+				_replaceValues.colCellStylesSelectedIndex = _colDropDown.selectedIndex;
+				var _cellStyle = _dok.cellStyles[_colDropDown.selectedIndex -1];
+				var _col = _table.columns[_colIndexDrop.editValue -1];
+				_col.cells.everyItem().appliedCellStyle = _cellStyle;
+				if(_ignoreColS.checkedState) { 
+					_col.cells.everyItem().clearCellStyleOverrides ();
+				}
+			}
+			_replaceValues.rowNumber = _rowIndexDrop.editContents;
+			_replaceValues.rowCellStylesIgnore = _ignoreRowS.checkedState;
+			if (_rowDropDown.selectedIndex > 0) {
+				_replaceValues.rowCellStylesSelectedIndex = _rowDropDown.selectedIndex;
+				var _cellStyle = _dok.cellStyles[_rowDropDown.selectedIndex -1];
+				var _row = _table.rows[_rowIndexDrop.editValue -1];
+				_row.cells.everyItem().appliedCellStyle = _cellStyle;
+				if(_ignoreRowS.checkedState) { 
+					_row.cells.everyItem().clearCellStyleOverrides ();
+				}
+			}
+		}
+		if (_ende.checkedState) {
+			_dlg.destroy();
+			return;
+		}
+		_dlg.destroy();
 	}
-	_dlg.destroy();
 }
 
 // Funktionen
@@ -162,7 +188,7 @@ function  getSpreadByObject (_object) {
 			if (_object == null) return null;
 		}
 		return _object;
-			} 
+	} 
 	else {
 		return null;
 	}

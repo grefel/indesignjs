@@ -1,4 +1,3 @@
-#target InDesign
 var _dok = app.activeDocument;
 var _ta = _dok.stories[0];
 var _pStyle = _dok.paragraphStyles.itemByName("u1");

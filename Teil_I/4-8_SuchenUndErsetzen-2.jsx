@@ -1,5 +1,4 @@
-﻿#target InDesign
-app.findGrepPreferences = NothingEnum.nothing;
+﻿app.findGrepPreferences = NothingEnum.nothing;
 app.findGrepPreferences.findWhat= "Max";
 app.changeGrepPreferences = NothingEnum.nothing;
 app.changeGrepPreferences.changeTo= "Moritz";
