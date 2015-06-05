@@ -120,8 +120,8 @@ function saveWhiteSpace(_xmlFile, xmlStyleMap) {
 	_text = _xmlFile .read();
 	_xmlFile.close();
 	for (var i = 0; i < xmlStyleMap.blockArray.length; i++) {
-		var _xapth = xmlStyleMap.blockArray[i].xpath;
-		var _tagName = _xapth.substring (_xapth.lastIndexOf ("/")+1);
+		var _xpath = xmlStyleMap.blockArray[i].xpath;
+		var _tagName = _xpath.substring (_xpath.lastIndexOf ("/")+1);
 		var _re = RegExp ("(<\\/" + _tagName + ">)", "g");
 		_text =_text.replace (_re, "\uE000$1");
 	}	
