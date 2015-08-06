@@ -7,4 +7,4 @@ Alle Skripte und Beispieldokumente zum Buch [InDesign Automatisieren](http://www
 
 * [InDesign Skripting Kurzreferenz](https://github.com/grefel/indesignjs/blob/version2/idskurzreferenz.pdf)
 
-Die Skritpe der ersten Auflage finden Sie [hier](https://github.com/grefel/indesignjs/tree/version1)
+Die Skripte der ersten Auflage finden Sie [hier](https://github.com/grefel/indesignjs/tree/version1)
