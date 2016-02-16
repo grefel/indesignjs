@@ -1,10 +1,6 @@
-# InDesign Automatisieren 2. Auflage 2015
+# InDesign Automatisieren 
 
+Alle Skripte und Beispieldokumente zum Buch [InDesign Automatisieren](http://www.indesignjs.de).
 
-Alle Skripte und Beispieldokumente zum Buch [InDesign Automatisieren](http://www.indesignjs.de) 2. Auflage 2015.
-
-###PDF Zusatzcontent 
-
-* [InDesign Skripting Kurzreferenz](https://github.com/grefel/indesignjs/blob/version2/idskurzreferenz.pdf)
-
-Die Skripte der ersten Auflage finden Sie [hier](https://github.com/grefel/indesignjs/tree/version1)
+* [1. Auflage 2011](https://github.com/grefel/indesignjs/tree/version1)
+* [2. Auflage 2015](https://github.com/grefel/indesignjs/tree/version2)
