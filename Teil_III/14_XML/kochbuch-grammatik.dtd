@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--	Eine einfache DTD -->
+
+<!-- 	Ein einziges Wurzelelment umschließt alle Kindelementem. 
+	Es muss mindestens ein rezept-Element angelegt werden -->
+<!ELEMENT 	kochbuch (rezept+) >
+
+<!--	Rezepte bestehen aus einem Container mit dem Titel, den Zutaten und einer Beschreibung -->
+<!ELEMENT 	rezept (titel, u-zwischen?, zutaten, u-zwischen?, beschreibung, bild-container?) >
+
+<!--	Mit dem Attribut id wird eine eindeutige Identifizierung pro Rezept vorgenommen,
+	mit dem Attribut art kann das Rezept einer bestimmten Rezeptklasse zugewiesen werden -->
+<!ATTLIST 	rezept
+		id ID #IMPLIED
+		art  (vorspeise|hauptgericht|dessert) #REQUIRED>
+
+<!ELEMENT 	titel (#PCDATA )>
+
+<!-- Container-Element für zutaten-->
+<!ELEMENT   zutaten (zutat+) >
+<!-- Container-Element für einzelen Zutat-->
+<!ELEMENT 	zutat (menge, name) >
+<!ELEMENT 	menge (#PCDATA )>
+<!ELEMENT 	name (#PCDATA )>
+
+
+<!ELEMENT bild-container (bild,legende?)>
+<!ELEMENT legende (#PCDATA )>
+
+<!ELEMENT bild EMPTY >
+<!ATTLIST bild 
+            href CDATA #REQUIRED>
+
+<!ELEMENT 	beschreibung (schritt+) >
+<!--	Die einzelnen Rezeptschritte können Textdaten (PCDATA) und Hervorhebungen  
+	in beliebiger Kombination enthalten-->
+<!ELEMENT 	schritt (#PCDATA | fett | kursiv)*>
+
+<!ELEMENT 	u-zwischen (#PCDATA )>
+
+<!--Inline-Elemente -->
+<!ELEMENT 	fett (#PCDATA )>
+<!ELEMENT 	kursiv (#PCDATA )>
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><kochbuch><rezept art="hauptgericht" id="i1"><titel>Pizzateig</titel><weblink url="http://www.indesignjs.de"/>
+<u-zwischen>Zutaten</u-zwischen>
+<zutaten><zutat><menge>400 g</menge>	<name>Weizenmehl</name></zutat>
+<zutat><menge>200 ml</menge>	<name>Wasser</name></zutat>
+<zutat><menge>1 Pck.</menge>	<name>frische Hefe</name></zutat>
+<zutat><menge>1 TL</menge>	<name>Meersalz</name></zutat>
+</zutaten><u-zwischen>Beschreibung</u-zwischen>
+<beschreibung><schritt>Das <kursiv>Mehl</kursiv> auf die Arbeitsfläche geben, in der Mitte eine Mulde für die Hefe drücken.</schritt>
+<schritt>Die <kursiv>Hefe</kursiv> in etwas <kursiv>Wasser</kursiv> auflösen, in die Mulde geben und vermengen.</schritt>
+<schritt>Nach und nach das Wasser zugeben, das <kursiv>Salz</kursiv> einarbeiten und zu einem geschmeidigen Teig verkneten.</schritt>
+<schritt>An einem warmen Ort für 1 Stunde gehen lassen.</schritt>
+<schritt>Den Teig belegen und bei mindestens <fett>250 °C</fett> ca. <fett>15 Minuten</fett> backen.</schritt>
+</beschreibung><bild-container><bild href="file://bilder/pizzateig.jpg"/><legende>Lassen Sie den gekneteten Teig mindestens 1 Stunde gehen.</legende></bild-container></rezept><rezept art="hauptgericht" id="i2"><titel>Tomatensugo</titel><weblink url="http://www.indesignjs.de"/>
+<u-zwischen>Zutaten</u-zwischen>
+<zutaten><zutat><menge>1 Zehe</menge>	<name>Knoblauch</name></zutat>
+<zutat><menge>1 Knolle</menge>	<name>Zwiebel</name></zutat>
+<zutat><menge>1 Dose</menge>	<name>Tomaten</name></zutat>
+<zutat><menge>Etwas</menge>	<name>Rosmarin, Oregano, frisches Basilikum</name></zutat>
+<zutat><menge>Prise</menge>	<name>Salz, Pfeffer</name></zutat>
+</zutaten><u-zwischen>Beschreibung</u-zwischen>
+<beschreibung><schritt><kursiv>Zwiebeln</kursiv>, <kursiv>Knoblauch</kursiv> und <kursiv>Kräuter</kursiv> klein würfeln und in <kursiv>Olivenöl</kursiv> anschwitzen.</schritt>
+<schritt><kursiv>Tomaten</kursiv> dazugeben und etwas einkochen lassen.</schritt>
+<schritt>Nach Belieben <kursiv>Basilikum</kursiv>, <kursiv>Oregano</kursiv> und <kursiv>Rosmarin</kursiv> zugeben.</schritt>
+<schritt>Mit <kursiv>Salz</kursiv> und <kursiv>Pfeffer</kursiv> nach Geschmack abschmecken.</schritt>
+<schritt>Sugo mindestens <fett>15 Minuten</fett> einkochen lassen.</schritt>
+</beschreibung><bild-container><bild href="file://bilder/tomatensugo.jpg"/><legende>Nach Zugabe der Kräuter gut einkochen lassen.</legende></bild-container></rezept><rezept art="dessert" id="i3"><titel>Fatimas 
+Versuchung</titel><weblink url="http://www.indesignjs.de"/>
+<u-zwischen>Zutaten</u-zwischen>
+<zutaten><zutat><menge>Einen</menge>	<name>Granatapfel</name></zutat>
+<zutat><menge>500 g</menge>	<name>türkischen Joghurt</name></zutat>
+<zutat><menge>200 ml</menge>	<name>Sahne</name></zutat>
+<zutat><menge>1 Pck.</menge>	<name>Vanillezucker</name></zutat>
+<zutat><menge>250 g</menge>	<name>getrocknete Aprikosen</name></zutat>
+</zutaten><u-zwischen>Beschreibung</u-zwischen>
+<beschreibung><schritt><kursiv>Joghurt</kursiv> abtropfen und mit pürierten <kursiv>Aprikosen</kursiv> vermischen.</schritt>
+<schritt><kursiv>Granatapfel</kursiv> auslösen, und in den Joghurt einrührern.</schritt>
+<schritt><kursiv>Sahne</kursiv> schlagen mit <kursiv>Vanillezucker</kursiv> steif schlagen.</schritt>
+<schritt>Sahne unter die Joghurtcreme heben.</schritt>
+<schritt>Die Creme kalt stellen.</schritt>
+</beschreibung></rezept></kochbuch>
