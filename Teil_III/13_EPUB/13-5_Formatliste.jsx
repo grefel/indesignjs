@@ -22,7 +22,7 @@ function exportFormatList () {
 		var _style = _results[s].appliedParagraphStyle;
 		var _formatName = _style.name;
 		var _tf = _results[s].parentTextFrames[0];
-		if (_tf != null) {
+		if (_tf && _tf.parentPage != null) {
 			var _pagePosition = _tf.parentPage.documentOffset;
 			var _pageName = _tf.parentPage.name;
 		}

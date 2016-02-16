@@ -2,7 +2,7 @@
 var _schriftG = _auswahl.characters[0].pointSize;
 var _kleinsterBuchstabe = _schriftG * 0.4; // 40 Prozent
 var _laenge = _auswahl.characters.length;
-var _schrittWeite = (_schriftG - _kleinsterBuchstabe) / _laenge;
+var _schrittWeite = (_schriftG - _kleinsterBuchstabe) / (_laenge -1);
 for (var i = 1; i < _auswahl.characters.length; i++) {
 	var _buchstabe = _auswahl.characters[i];
 	_aktuellerAbzug = _schrittWeite * i;
