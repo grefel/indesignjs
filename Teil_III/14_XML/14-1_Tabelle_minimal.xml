@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textrahmen xmlns:aid="http://ns.adobe.com/AdobeInDesign/4.0/" xmlns:aid5="http://ns.adobe.com/AdobeInDesign/5.0/">
+	<table aid:table="table" aid:trows="4" aid:tcols="2">
+		<c aid:table="cell" aid:theader="">K1</c>
+		<c aid:table="cell" aid:theader="">K1</c>
+		<c aid:table="cell">A1</c>
+		<c aid:table="cell">A2</c>
+		<c aid:table="cell">B1</c>
+		<c aid:table="cell">B2</c>
+		<c aid:table="cell" aid:tfooter="">F1</c>
+		<c aid:table="cell" aid:tfooter="">F2</c>
+	</table>
+</textrahmen>
