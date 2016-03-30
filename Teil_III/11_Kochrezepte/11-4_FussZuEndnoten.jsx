@@ -1,4 +1,4 @@
-#target InDesign
+﻿#target InDesign
 if (app.documents.length > 0) {
 	var _dok = app.activeDocument;
 	var _rulerOrigin = _dok.viewPreferences.rulerOrigin;
@@ -6,7 +6,7 @@ if (app.documents.length > 0) {
 	var _zeroPoint = _dok.zeroPoint;
 	_dok.zeroPoint = [0,0];
 	if (app.scriptPreferences.version >= 6 ) { // Ab CS4 Undo bereitstellen
-		app.doScript(fussZuEnd, ScriptLanguage.JAVASCRIPT, _dok, UndoModes.ENTIRE_SCRIPT, "Marginalie erstellen"); 		
+		app.doScript(fussZuEnd, ScriptLanguage.JAVASCRIPT, _dok, UndoModes.ENTIRE_SCRIPT, "Fuß- zu Endnoten konvertieren"); 		
 	} 
 	else {
 		fussZuEnd(_dok);
@@ -24,8 +24,10 @@ function fussZuEnd (_dok) {
 	_allFootN = _dok.stories.everyItem().footnotes.everyItem().getElements();
 	for (var j = 0; j < _allFootN.length; j++) {
 		var _footN = _allFootN[j];
-		_tf.insertionPoints[-1].contents = "\r";
-		var _endN = _footN.texts[0].move (LocationOptions.AFTER, _tf.paragraphs[-1]);
+		_footN.storyOffset.appliedCharacterStyle = "Endnote-Zaehler";
+		_footN.storyOffset.contents =  (j+1)+"";		
+		_tf.parentStory.insertionPoints[-1].contents = "\r";
+		var _endN = _footN.texts[0].move (LocationOptions.AFTER, _tf.parentStory.paragraphs[-1]);
 		_endN.appliedParagraphStyle = "Endnote";
 	} 
 	app.findGrepPreferences = NothingEnum.NOTHING;
