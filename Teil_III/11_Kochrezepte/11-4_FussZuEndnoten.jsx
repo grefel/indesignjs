@@ -18,8 +18,8 @@ function fussZuEnd(_dok) {
 	var _allFootN = _dok.stories.everyItem().footnotes.everyItem().getElements();
 	for (var j = 0; j < _allFootN.length; j++) {
 		var _footN = _allFootN[j];
-		_tf.insertionPoints[-1].contents = "\r";
-		var _endN = _footN.texts[0].move (LocationOptions.AFTER, _tf.paragraphs[-1]);
+		_tf.parentStory.insertionPoints[-1].contents = "\r";
+		var _endN = _footN.texts[0].move (LocationOptions.AFTER, _tf.parentStory.paragraphs[-1]);
 		var _absF = _dok.paragraphStyles.itemByName("Endnote");
 		_endN.appliedParagraphStyle = _absF;
 		var _querVF = _dok.crossReferenceFormats.itemByName("Endnote");
