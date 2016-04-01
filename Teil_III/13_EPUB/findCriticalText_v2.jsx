@@ -167,7 +167,7 @@ function main() {
 								win.infoPanel.errorGroup.alignChildren= "left";
 								with (win.infoPanel.errorGroup) {
 									win.infoPanel.errorGroup.textZeile = add( "statictext", undefined, "-");
-		//~ 							win.infoPanel.errorGroup.problemCorrection= add( "statictext", undefined, "Korrektur:");
+									win.infoPanel.errorGroup.textZeile.preferredSize.width = 400;
 								}
 							}
 
@@ -371,14 +371,18 @@ function init() {
 
 // Get surrounding text from error
 function getLineContents(currentError) {
+	if (currentError instanceof Hyperlink) {
+		currentError = currentError.source.sourceText;
+	}
 	var story = currentError.parentStory;
 	if (currentError.parent.constructor.name == "Cell") {
 		story = currentError.parent.texts[0]
 	} 
-	var index = currentError.index;
-	var vor = story.characters.itemByRange((index >= 10) ? index - 10:index,(index >= 1) ? index - 1:index);
-	var nach = story.characters.itemByRange((index < story.characters.length-1) ? index + 1:index , (index < story.characters.length-10) ? index + 10:index );
-	var stelle = story.characters[index];
+	var startIndex = currentError.insertionPoints[0].index;
+	var endIndex = currentError.insertionPoints[-1].index;
+	var vor = story.characters.itemByRange((startIndex >= 10) ? startIndex - 10:startIndex,(startIndex >= 1) ? startIndex - 1:startIndex);
+	var nach = story.characters.itemByRange((endIndex < story.characters.length-1) ? endIndex + 1:endIndex , (endIndex < story.characters.length-10) ? endIndex + 10:endIndex );
+	var stelle = story.characters.itemByRange(startIndex, endIndex);
 	var res = vor.contents + "[" +  stelle.contents.toString() + "]" + nach.contents;	
 	res = res.replace(/\n/g, '');
 	res = res.replace(/\r/g, '');
@@ -391,6 +395,7 @@ function getLineContents(currentError) {
 }
 function showIt (_object) {
     if (_object != null) {
+        if (_object.hasOwnProperty ("source")) _object = _object.source;
         if (_object.hasOwnProperty ("sourcePageItem")) _object = _object.sourcePageItem;
         if (_object.hasOwnProperty ("sourceText")) _object = _object.sourceText;
         var _spread = getSpreadByObject (_object);
