@@ -370,15 +370,34 @@ function init() {
 }
 
 // Get surrounding text from error
-function getLineContents(currentError) {
+function getLineContents(currentError, pre, post) {
+	if (currentError instanceof Hyperlink) {
+		if (!currentError.isValid) return "Fehler"
+		currentError = currentError.source.sourceText;
+	}
 	var story = currentError.parentStory;
 	if (currentError.parent.constructor.name == "Cell") {
 		story = currentError.parent.texts[0]
 	} 
-	var index = currentError.index;
-	var vor = story.characters.itemByRange((index >= 10) ? index - 10:index,(index >= 1) ? index - 1:index);
-	var nach = story.characters.itemByRange((index < story.characters.length-1) ? index + 1:index , (index < story.characters.length-10) ? index + 10:index );
-	var stelle = story.characters[index];
+	var startIndex = currentError.insertionPoints[0].index;
+	var endIndex = currentError.characters[-1].index;
+	var vor = undefined;
+	if (startIndex == 0 ) {
+		vor = story.insertionPoints[0];
+	} 
+	else {
+		vor = story.characters.itemByRange( (startIndex > pre) ? startIndex - pre : 0, startIndex - 1);
+
+	}
+	var nach = undefined;
+	if (endIndex == story.characters.length -1) {
+		nach = story.insertionPoints[-1];
+	} 
+	else {
+		nach = story.characters.itemByRange(endIndex + 1, (endIndex < story.characters.length - post) ? endIndex + post : story.characters.length - 1);
+	}
+
+	var stelle = story.characters.itemByRange(startIndex, endIndex);
 	var res = vor.contents + "[" +  stelle.contents.toString() + "]" + nach.contents;	
 	res = res.replace(/\n/g, '');
 	res = res.replace(/\r/g, '');
