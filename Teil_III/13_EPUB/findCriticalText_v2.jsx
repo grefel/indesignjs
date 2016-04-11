@@ -371,6 +371,7 @@ function init() {
 
 // Get surrounding text from error
 function getLineContents(currentError, pre, post) {
+	if (post == undefined) post = pre;
 	if (currentError instanceof Hyperlink) {
 		if (!currentError.isValid) return "Fehler"
 		currentError = currentError.source.sourceText;
