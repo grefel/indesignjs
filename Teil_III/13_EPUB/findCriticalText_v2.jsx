@@ -370,8 +370,10 @@ function init() {
 }
 
 // Get surrounding text from error
-function getLineContents(currentError) {
+function getLineContents(currentError, pre, post) {
+	if (post == undefined) post = pre;
 	if (currentError instanceof Hyperlink) {
+		if (!currentError.isValid) return "Fehler"
 		currentError = currentError.source.sourceText;
 	}
 	var story = currentError.parentStory;
@@ -379,9 +381,23 @@ function getLineContents(currentError) {
 		story = currentError.parent.texts[0]
 	} 
 	var startIndex = currentError.insertionPoints[0].index;
-	var endIndex = currentError.insertionPoints[-1].index;
-	var vor = story.characters.itemByRange((startIndex >= 10) ? startIndex - 10:startIndex,(startIndex >= 1) ? startIndex - 1:startIndex);
-	var nach = story.characters.itemByRange((endIndex < story.characters.length-1) ? endIndex + 1:endIndex , (endIndex < story.characters.length-10) ? endIndex + 10:endIndex );
+	var endIndex = currentError.characters[-1].index;
+	var vor = undefined;
+	if (startIndex == 0 ) {
+		vor = story.insertionPoints[0];
+	} 
+	else {
+		vor = story.characters.itemByRange( (startIndex > pre) ? startIndex - pre : 0, startIndex - 1);
+
+	}
+	var nach = undefined;
+	if (endIndex == story.characters.length -1) {
+		nach = story.insertionPoints[-1];
+	} 
+	else {
+		nach = story.characters.itemByRange(endIndex + 1, (endIndex < story.characters.length - post) ? endIndex + post : story.characters.length - 1);
+	}
+
 	var stelle = story.characters.itemByRange(startIndex, endIndex);
 	var res = vor.contents + "[" +  stelle.contents.toString() + "]" + nach.contents;	
 	res = res.replace(/\n/g, '');
@@ -390,9 +406,7 @@ function getLineContents(currentError) {
 	res = res.replace(/\[DISCRETIONARY_HYPHEN\]/g, '[BEDINGTE TRENNUNG]');
 	res = res.replace(/\￼/g, '[VERANKERTES OBJEKT]');
 	res = res.replace(/\/g, '[EINZUG HIER]');
-	res = res.replace(/\t/g, '[TABULATOR]');
-	return res;
-}
+	res = res.replace(/\t/g, '[TABULATOR]'
 function showIt (_object) {
     if (_object != null) {
         if (_object.hasOwnProperty ("source")) _object = _object.source;
