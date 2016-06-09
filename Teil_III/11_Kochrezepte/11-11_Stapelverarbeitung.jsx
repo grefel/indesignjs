@@ -28,7 +28,7 @@ function processFolder() {
 	for (var i = 0; i < _fileArray.length; i++) {
 		_progressBar.hit(i);
 		var _file = _fileArray[i];
-		var _dok = app.open(_file, false);
+		var _dok = app.open(_file, true);
 		var _dokName = _dok.name.replace(/\.indd$/, "");
 		for (var p = 0; p < _dok.pages.length; p++) {
 			var _pageName = _dok.pages[p].name;
