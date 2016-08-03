@@ -317,7 +317,7 @@ function main() {
 		win.controlGroup.g2.rightGroup.correctButton.helpTip = "Korrektur: " + errorContext.solutionText;
 		win.infoPanel.errorCountGroup.countCurrent.text = (errorContext.ec+1) + "/" + errorContext.errorArray.length;
 		errorContext.currentError = errorContext.errorArray[errorContext.ec]
-		win.infoPanel.errorGroup.textZeile.text = getLineContents(errorContext.currentError);
+		win.infoPanel.errorGroup.textZeile.text = getLineContents(errorContext.currentError, 10);
 		showIt (errorContext.currentError);
 		errorContext.alreadyFixed = false;
 		errorContext.ec++;
