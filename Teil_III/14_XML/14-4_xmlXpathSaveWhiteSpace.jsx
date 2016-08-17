@@ -11,7 +11,7 @@ function main () {
 		_dok.viewPreferences.rulerOrigin =_rulerOrigin;		
 		_dok.zeroPoint = _zeroPoint;
 	} else {
-		alert ("Kein Dokument geöffnet!")
+		alert ("Kein Dokument geöffnet!");
 	}
 }
 
@@ -51,7 +51,7 @@ function xmlImport (_dok) {
 		importCALSTables = false;
 	}		
 	_dok.importXML(_xmlFile);
-	// Save Whitespace Character wieder entferntn 
+	// Save Whitespace Character wieder entfernen 
 	app.findGrepPreferences = NothingEnum.NOTHING;
 	app.changeGrepPreferences = NothingEnum.NOTHING;
 	app.findGrepPreferences.findWhat = "\\x{E000}";
@@ -90,8 +90,6 @@ function xmlImport (_dok) {
 	app.changeGrepPreferences = NothingEnum.NOTHING;
 }
 
-
-// Liefert das 
 function getParagraphStyle (_dok, _styleName) {
 	for (var i = 0; i < _dok.allParagraphStyles.length; i++) {
 		if (_dok.allParagraphStyles[i].name == _styleName) {
@@ -110,8 +108,6 @@ function getCharacterStyle (_dok, _styleName) {
 	// Style muss erstellt werden 
 	return app.activeDocument.characterStyles.add({name:_styleName});
 }
-
-
 
 // Save Whitespace in Blocklevel
 function saveWhiteSpace(_xmlFile, xmlStyleMap) {
