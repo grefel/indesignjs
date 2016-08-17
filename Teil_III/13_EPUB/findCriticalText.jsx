@@ -123,11 +123,11 @@ function main() {
 			for  (var i = 0; i <  fcList.iaGREP.length; i++) {
 				var grepObject = fcList.iaGREP[i];
 				var findFunctionName = "find_px_customFunction" + i; 
-				globalObject[findFunctionName] = new Function(["fcContext"], "if (app.findChangeGrepOptions.hasOwnProperty ('searchBackwards')) {\rapp.findChangeGrepOptions.searchBackwards = false;\r}\rapp.findGrepPreferences = NothingEnum.NOTHING;\napp.findGrepPreferences.findWhat = '" + grepObject.findGREP.replace(/\\/g, '\\\\') + "';\nreturn fcContext.findGrep(true);");
-				grepObject.findFunction = findFunctionName				
+				globalObject[findFunctionName] = new Function(["fcContext"], "if (app.findChangeGrepOptions.hasOwnProperty ('searchBackwards')) {\rapp.findChangeGrepOptions.searchBackwards = false;\r}\rapp.findGrepPreferences = NothingEnum.NOTHING;\napp.findGrepPreferences.findWhat = '" + grepObject.findGREP.replace(/\\/g, '\\\\').replace(/'/g, '\\\'') + "';\nreturn fcContext.findGrep(true);");
+				grepObject.findFunction = findFunctionName;		
 				var replaceFunctionName = "replace_px_customFunction" + i; 
-				globalObject[replaceFunctionName] = new Function("args", "var text = args[0];\ntext.contents = '" + grepObject.changeString.replace(/\\/g, '\\\\')  + "';");
-				grepObject.changeFunction = replaceFunctionName
+				globalObject[replaceFunctionName] = new Function("args", "var text = args[0];\ntext.contents = '" + grepObject.changeString.replace(/\\/g, '\\\\').replace(/'/g, '\\\'')  + "';");
+				grepObject.changeFunction = replaceFunctionName;
 				fcList.iaFunctions.push(grepObject);
 			}
 			// Check for Interactive Queries ... 
