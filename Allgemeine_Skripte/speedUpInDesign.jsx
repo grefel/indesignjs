@@ -36,8 +36,19 @@ function speedUp() {
 		}
 	}
 
-	//~ Turn Off Hyperlink Verification
-	//~ app.menuActions.itemByID(0x13651).invoke(); // We do not know the state
+	//~ Turn off "AutoUpdateURLStatus" from "Hyperlinks" panel - Thanks to Uwe Laubender for the workaround
+	var autoUpdateURLStatus = app.menuActions.itemByName("$ID/AutoUpdateURLStatus");
+	var hyperLinksPanel = app.panels.itemByName("$ID/Hyperlinks");
+	var visibility = hyperLinksPanel.visible;
+
+	if (!visibility) {
+		hyperLinksPanel.visible = true
+	}
+	savePreference("autoUpdateURLStatus", autoUpdateURLStatus.checked);
+	if (autoUpdateURLStatus.checked) {
+		app.menuActions.itemByName("$ID/AutoUpdateURLStatus").invoke();
+	}
+	hyperLinksPanel.visible = visibility;
 
 	savePreference("app.generalPreferences.includePreview", app.generalPreferences.includePreview);
 	app.generalPreferences.includePreview = false;
@@ -64,8 +75,19 @@ function restore() {
 		}
 	}
 
-	//~ Turn Off Hyperlink Verification
-	//~ app.menuActions.itemByID(0x13651).invoke(); // We do not know the state
+	//~ Turn off "AutoUpdateURLStatus" from "Hyperlinks" panel - Thanks to Uwe Laubender for the workaround
+	var autoUpdateURLStatus = app.menuActions.itemByName("$ID/AutoUpdateURLStatus");
+	setting = getPreference("autoUpdateURLStatus");
+	var hyperLinksPanel = app.panels.itemByName("$ID/Hyperlinks");
+	var visibility = hyperLinksPanel.visible;
+
+	if (!visibility) {
+		hyperLinksPanel.visible = true
+	}
+	if (autoUpdateURLStatus.checked != setting) {
+		app.menuActions.itemByName("$ID/AutoUpdateURLStatus").invoke();
+	}
+	hyperLinksPanel.visible = visibility;
 
 	setting = getPreference("app.generalPreferences.includePreview");
 	if (setting != undefined) app.generalPreferences.includePreview = setting;
