@@ -3,9 +3,9 @@
 	This script is inspired by Erica Gamet article on InDesign Secrets
 	http://indesignsecrets.com/6-tips-speed-up-indesign.php
 	
-	@Date:  2016-07-26
-	@Author: Gregor Fellenz http://www.publishingx.de
-	@Version: 1.0
+	@Date:  2017-01-02
+	@Author: Gregor Fellenz http://www.publishingx.de 
+	@Version: 1.1
 */
 
 if (app.extractLabel("px:speedUpState") == "") {
@@ -46,7 +46,7 @@ function speedUp() {
 	}
 	savePreference("autoUpdateURLStatus", autoUpdateURLStatus.checked);
 	if (autoUpdateURLStatus.checked) {
-		app.menuActions.itemByName("$ID/AutoUpdateURLStatus").invoke();
+		autoUpdateURLStatus.invoke();
 	}
 	hyperLinksPanel.visible = visibility;
 
@@ -85,7 +85,7 @@ function restore() {
 		hyperLinksPanel.visible = true
 	}
 	if (autoUpdateURLStatus.checked != setting) {
-		app.menuActions.itemByName("$ID/AutoUpdateURLStatus").invoke();
+		autoUpdateURLStatus.invoke();
 	}
 	hyperLinksPanel.visible = visibility;
 
