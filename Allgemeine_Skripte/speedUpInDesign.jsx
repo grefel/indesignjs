@@ -3,9 +3,9 @@
 	This script is inspired by Erica Gamet article on InDesign Secrets
 	http://indesignsecrets.com/6-tips-speed-up-indesign.php
 	
-	@Date:  2017-01-02
+	@Date:  2017-01-10
 	@Author: Gregor Fellenz http://www.publishingx.de 
-	@Version: 1.1
+	@Version: 1.2
 */
 
 if (app.extractLabel("px:speedUpState") == "") {
@@ -96,6 +96,7 @@ function restore() {
 function getPreference (prefname) {
 	var setting = app.extractLabel("px:savePref" + prefname);
 	if (setting === "") return undefined;
-	if (setting === "true" || setting == "false") return Boolean(setting);
+	if (setting === "true") return true;
+	if (setting === "false") return false;
 	return setting * 1;
 }
