@@ -3,7 +3,7 @@
 	This script is inspired by Erica Gamet article on InDesign Secrets
 	http://indesignsecrets.com/6-tips-speed-up-indesign.php
 	
-	@Date:  2017-01-10
+	@Date:  2018-11-30
 	@Author: Gregor Fellenz http://www.publishingx.de 
 	@Version: 1.2
 */
@@ -30,9 +30,13 @@ function speedUp() {
 	app.preflightOptions.preflightOff = true;
 
 	for (var i = 0; i < app.panels.length; i++) {
-		if (app.panels[i].hasOwnProperty("pagesThumbnails") ) {
-			savePreference("app.panels[i].pagesThumbnails", app.panels[i].pagesThumbnails);
-			app.panels[i].pagesThumbnails = false;
+		try {
+			if (app.panels[i].hasOwnProperty("pagesThumbnails") ) {
+				savePreference("app.panels[i].pagesThumbnails", app.panels[i].pagesThumbnails);
+				app.panels[i].pagesThumbnails = false;
+			}
+		} catch (error) {
+			
 		}
 	}
 
